@@ -20,22 +20,22 @@ def write_to_json(file_name, dictionary):
     text_file.close()
              
 if __name__ == '__main__':
-    pokemon_to_abilities_map = {}
-    abilities_to_pokemon_map = {}
+    pokemon_to_moves_map = {}
+    moves_to_pokemon_map = {}
 
     with open('../data/data_learnsets.txt') as json_file:
         data = json.load(json_file)
         
     for pokemon_name, second_dict in data.items():
-        for learnset, ability_to_move_source_map in second_dict.items():
-            abilities = getList(ability_to_move_source_map.keys())
+        for learnset, move_to_move_source_map in second_dict.items():
+            moves = getList(move_to_move_source_map.keys())
             
-            pokemon_to_abilities_map[pokemon_name] = abilities
+            pokemon_to_moves_map[pokemon_name] = moves
             
-            for ability in abilities:
-                if ability not in abilities_to_pokemon_map:
-                    abilities_to_pokemon_map[ability] = []
-                abilities_to_pokemon_map[ability].append(pokemon_name)
+            for move in moves:
+                if move not in moves_to_pokemon_map:
+                    moves_to_pokemon_map[move] = []
+                moves_to_pokemon_map[move].append(pokemon_name)
     
-    write_to_json('../data/data_abilities_to_pokemon.json', abilities_to_pokemon_map)
-    write_to_json('../data/data_pokemon_to_abilities.json', pokemon_to_abilities_map)  
+    write_to_json('../data/data_moves_to_pokemon.json', moves_to_pokemon_map)
+    write_to_json('../data/data_pokemon_to_moves.json', pokemon_to_moves_map)  

@@ -7,11 +7,19 @@ interface Superposition
 class PokemonSuperposition
 {
     matrix : Array<Array<String>>;
-    constructor()
+    constructor(copy? : PokemonSuperposition)
     {
         this.matrix = [];
-        this.matrix.push(["Dragapult", "Arcanine", "Excadrill", "Whimsicott", "Togekiss", "Gastrodon"]);
-        this.matrix.push(["Life Orb", "Weakness Policy", "Lum Berry", "Choice Specs", "Focus Sash"]);
+        if (copy == null)
+        {
+            this.matrix.push(["Dragapult", "Arcanine", "Excadrill", "Whimsicott", "Togekiss", "Gastrodon"]);
+            this.matrix.push(["Life Orb", "Weakness Policy", "Lum Berry", "Choice Specs", "Focus Sash"]);
+        }
+        else
+        {
+            this.matrix.push(copy.matrix[0].slice());
+            this.matrix.push(copy.matrix[1].slice());
+        }
     }
 
     public collapse(observation : number) : void
@@ -31,20 +39,19 @@ class Collapser
     history : Array<Superposition>;
     stepNumber : number = 0;
 
-    constructor(superposition : Superposition = new PokemonSuperposition())
+    constructor()
     {
         this.pos = new PokemonSuperposition();
-        this.history = [];
+        this.history = [new PokemonSuperposition(this.pos)];
     }
 
     public step()
     {
-        // this.history.push(new PokemonSuperposition(this.pos));
-
         let observation : number = this.observe();
         if (observation >= 0)
         {
             this.pos.collapse(observation);
+            this.history.push(new PokemonSuperposition(this.pos));
         }
         return observation;
     }

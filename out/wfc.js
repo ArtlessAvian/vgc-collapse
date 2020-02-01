@@ -1,8 +1,14 @@
 var PokemonSuperposition = (function () {
-    function PokemonSuperposition() {
+    function PokemonSuperposition(copy) {
         this.matrix = [];
-        this.matrix.push(["Dragapult", "Arcanine", "Excadrill", "Whimsicott", "Togekiss", "Gastrodon"]);
-        this.matrix.push(["Life Orb", "Weakness Policy", "Lum Berry", "Choice Specs", "Focus Sash"]);
+        if (copy == null) {
+            this.matrix.push(["Dragapult", "Arcanine", "Excadrill", "Whimsicott", "Togekiss", "Gastrodon"]);
+            this.matrix.push(["Life Orb", "Weakness Policy", "Lum Berry", "Choice Specs", "Focus Sash"]);
+        }
+        else {
+            this.matrix.push(copy.matrix[0].slice());
+            this.matrix.push(copy.matrix[1].slice());
+        }
     }
     PokemonSuperposition.prototype.collapse = function (observation) {
         console.log(observation);
@@ -10,16 +16,16 @@ var PokemonSuperposition = (function () {
     return PokemonSuperposition;
 }());
 var Collapser = (function () {
-    function Collapser(superposition) {
-        if (superposition === void 0) { superposition = new PokemonSuperposition(); }
+    function Collapser() {
         this.stepNumber = 0;
         this.pos = new PokemonSuperposition();
-        this.history = [];
+        this.history = [new PokemonSuperposition(this.pos)];
     }
     Collapser.prototype.step = function () {
         var observation = this.observe();
         if (observation >= 0) {
             this.pos.collapse(observation);
+            this.history.push(new PokemonSuperposition(this.pos));
         }
         return observation;
     };
