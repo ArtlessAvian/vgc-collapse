@@ -39,7 +39,7 @@ def get_abilities_hashmaps(data):
     pokemon_to_abilities_map = {}
     abilities_to_pokemon_map = {}
     for pokemon_name, second_dict in data.items():
-        abilities_list = getList(second_dict["abilities"].keys())
+        abilities_list = getList(second_dict["abilities"].values())
         pokemon_to_abilities_map[pokemon_name] = abilities_list
         
         for ability in abilities_list:
