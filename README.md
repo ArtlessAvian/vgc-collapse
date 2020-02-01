@@ -1,5 +1,6 @@
 # VGC Collapse
 Use Wave Function Collapse to generate valid Pokemon teams. "Quality" guaranteed.
+Made for HackUCI.
 
 ## Project Description
 Starting from an empty team, fill or leave blank fields of Pokemon, their abilities, their items, and their moves.

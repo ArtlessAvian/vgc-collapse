@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "removeComments": true,
+        "target": "ES5",
+        "outDir": "out",
+        "rootDir": "src"
+    }
+}
