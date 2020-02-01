@@ -1,8 +1,36 @@
 html, body {
     padding: 0;
     margin: 0;
+    height: 100%;
+    width: 100%;
 }
 
 body {
-    background-color: rgba(69, 69, 69, 1);
+    background:
+        linear-gradient(
+            to bottom right,
+            #39ebd1 10%,
+            #02a1fd
+        );
+
+    /* background-color: #14b8ef; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pokemon-team-container {
+    background-color: rgba(0, 255, 234, 0.6);
+    height: 75%;
+    width: 90%;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;  
+}
+
+.pokemon-card {
+    background-color: rgba(68, 255, 239, 0.651);
 }
