@@ -4,12 +4,20 @@ namespace Dropdown
     {
         let dropdown = document.getElementById("dropdown-" + i + "-0");
         let image = document.getElementById("img-" + i);
+        let types = document.getElementById("types-" + i);
+        let typeTxt = "";
         let txt : string;
         
         if (pokemon.length === 1) {
             txt = "<option value='" + pokemon[0] + "' disabled selected hidden>" + pokemon[0] + "</option>";
             $(image).attr("src", Model.pokemon_to_image[pokemon[0]]);
-            
+            let typesArr = Model.pokemon_to_types[pokemon[0]];
+            let type : string;
+
+            for (type of typesArr)
+            {
+                typeTxt += "<div class='type " + type + "'>" + type + "</div>";
+            }
         } else
         {
             $(image).attr("src", "whosthat.png");
@@ -21,7 +29,7 @@ namespace Dropdown
             }
         }
         dropdown.innerHTML = txt;
-
+        types.innerHTML = typeTxt;
     }
 
     export function createPokemonAbilityDropdown(abilities : Array<string>, i : number,)

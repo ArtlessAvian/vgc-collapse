@@ -3,21 +3,30 @@ var Dropdown;
     function createPokemonNameDropdown(pokemon, i) {
         var dropdown = document.getElementById("dropdown-" + i + "-0");
         var image = document.getElementById("img-" + i);
+        var types = document.getElementById("types-" + i);
+        var typeTxt = "";
         var txt;
         if (pokemon.length === 1) {
             txt = "<option value='" + pokemon[0] + "' disabled selected hidden>" + pokemon[0] + "</option>";
             $(image).attr("src", Model.pokemon_to_image[pokemon[0]]);
+            var typesArr = Model.pokemon_to_types[pokemon[0]];
+            var type = void 0;
+            for (var _i = 0, typesArr_1 = typesArr; _i < typesArr_1.length; _i++) {
+                type = typesArr_1[_i];
+                typeTxt += "<div class='type " + type + "'>" + type + "</div>";
+            }
         }
         else {
             $(image).attr("src", "whosthat.png");
             txt = "<option value='' disabled selected hidden>-----</option>";
             var p = void 0;
-            for (var _i = 0, pokemon_1 = pokemon; _i < pokemon_1.length; _i++) {
-                p = pokemon_1[_i];
+            for (var _a = 0, pokemon_1 = pokemon; _a < pokemon_1.length; _a++) {
+                p = pokemon_1[_a];
                 txt += "<option>" + p + "</option>";
             }
         }
         dropdown.innerHTML = txt;
+        types.innerHTML = typeTxt;
     }
     Dropdown.createPokemonNameDropdown = createPokemonNameDropdown;
     function createPokemonAbilityDropdown(abilities, i) {
