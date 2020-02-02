@@ -162,8 +162,8 @@ def get_pokemon_to_name_hashmaps(data: dict) -> (dict, dict):
     
     Arguments:
         data: Smogon's Pokedex data. A dict mapping Pokemon (string) to dicts.
-        The dicts map trait types (string) to specific traits (ints, strings,
-        dicts, etc.).
+            The dicts map trait types (string) to specific traits (ints, 
+            strings, dicts, etc.).
         
     Returns:
         A 2-tuple of dicts. The first dict maps Pokemon variable names (string) 
@@ -185,8 +185,8 @@ def get_moves_to_name_hashmaps(data: dict) -> (dict, dict):
     
     Arguments:
         data: Smogon's Pokedex data. A dict mapping moves (string) to a dict.
-        The dicts map trait types (string) to specific traits (ints, strings,
-        dicts, etc.).
+            The dicts map trait types (string) to specific traits (ints, 
+            strings, dicts, etc.).
         
     Returns:
         A 2-tuple of dicts. The first dict maps move variable names (string) to
@@ -199,6 +199,26 @@ def get_moves_to_name_hashmaps(data: dict) -> (dict, dict):
         moves_to_name_map[move_name] = second_dict["name"]
         name_to_moves_map[second_dict["name"]] = move_name
     return (moves_to_name_map, name_to_moves_map)
+
+def get_pokemon_to_sprite_url_hashmap(pkmn_display_names: dict, \
+                                      legal_pokemon: set):
+    '''
+    Arguments:    
+        pkmn_display_names: A dict mapping variable names (string) to 
+            user-friendly display names (string).
+        legal_pokemon: Set of Pokemon that exist in generation 8.
+        
+    Returns:
+        A dict mapping pkmn_display_names (string) to a website to get the
+        Pokemon's sprite (string).
+    '''
+    pkmn_to_sprite_url_map = {}
+    url_base = "https://play.pokemonshowdown.com/sprites/gen5/"
+    for pokemon_name in legal_pokemon:
+        pkmn_display_name = pkmn_display_names[pokemon_name]
+        url_suffix = '-'.join(pkmn_display_name.lower().split(' ')) + ".png"
+        pkmn_to_sprite_url_map[pkmn_display_name] = url_base + url_suffix
+    return pkmn_to_sprite_url_map
 
 if __name__ == '__main__':
     legal_pokemon_set = set()
@@ -229,7 +249,13 @@ if __name__ == '__main__':
         moves = json.load(json_file)    
         moves_to_display_map = get_moves_to_name_hashmaps(moves)[0]
         
-        
+    #
+    pkmn_to_sprite_url_map = \
+            get_pokemon_to_sprite_url_hashmap(pkmn_name_to_display_map, \
+                                              legal_pokemon_set)
+    write_to_json('../data/sprite_url/data_names_to_sprite_url.json', 
+                      pkmn_to_sprite_url_map)
+    
     # Get Pokemon-to-moves JSON.        
     with open('../data/data_learnsets.txt') as json_file:
         learnsets = json.load(json_file)
@@ -262,6 +288,7 @@ if __name__ == '__main__':
                       types_hashmaps[0])     
         write_to_json('../data/types/data_types_to_pokemon.json', 
                       types_hashmaps[1])
+    
     
 
                       

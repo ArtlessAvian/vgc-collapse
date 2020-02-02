@@ -44,6 +44,10 @@ Promise.all(Model.promises)
         console.log(cardNum);
         console.log(matrix);
 
+        // 0 is pokemon name
+        // 1 is ability
+        // [2-5] are moves (2, 3, 4, 5)
+        // matrix[]
     }
 
     Dropdown.createPokemonNameDropdown(main.pos.matrix[0]);
