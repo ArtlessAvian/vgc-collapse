@@ -249,10 +249,12 @@ if __name__ == '__main__':
         moves = json.load(json_file)    
         moves_to_display_map = get_moves_to_name_hashmaps(moves)[0]
         
-    pkmn_to_url_map = get_pokemon_to_sprite_url_hashmap(pkmn_name_to_display_map, \
-                                                        legal_pokemon_set)
-    write_to_json('../data/spritelink/data_names_to_spritelink.json', 
-                      pkmn_to_url_map)
+    #
+    pkmn_to_sprite_url_map = \
+            get_pokemon_to_sprite_url_hashmap(pkmn_name_to_display_map, \
+                                              legal_pokemon_set)
+    write_to_json('../data/sprite_url/data_names_to_sprite_url.json', 
+                      pkmn_to_sprite_url_map)
     
     # Get Pokemon-to-moves JSON.        
     with open('../data/data_learnsets.txt') as json_file:
