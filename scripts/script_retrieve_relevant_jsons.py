@@ -19,11 +19,17 @@ def write_to_json(file_name, dictionary):
     text_file.write(string)
     text_file.close()
     
-def get_moves_hashmaps(data):
+def get_moves_hashmaps(data: dict) -> (dict, dict):
     '''Hash Pokemon to moves.
     
+    The input file contains a lot of unneccessary information. This function
+    simply trims down the input.
+    
     Arguments:
-        data (dict): Smogon's Learnset data, converted to a dict.
+        data: Smogon's Learnset data. A dict mapping Pokemon (string) to a dict
+        with a single key, "learnset" (string). The value of the associated 
+        with "learnset" is another dict, which maps moves (string) to the 
+        method by which the aforementioned Pokemon attains the move.
         
     Returns:
         A 2-tuple of dicts. The first dict maps Pokemon (string) to the moves
@@ -44,11 +50,16 @@ def get_moves_hashmaps(data):
                 moves_to_pokemon_map[move].append(pokemon_name)
     return (pokemon_to_moves_map, moves_to_pokemon_map)
 
-def get_abilities_hashmaps(data):
+def get_abilities_hashmaps(data: dict) -> (dict, dict):
     '''Hash Pokemon to abilities.
     
+    The input file contains a lot of unneccessary information. This function
+    simply trims down the input.
+    
     Arguments:
-        data (dict): Smogon's Pokedex data, converted to a dict.
+        data: Smogon's Pokedex data. A dict mapping Pokemon (string) to a dict.
+        This dict maps trait types (string) to specific traits (ints, strings,
+        dicts, etc.).
         
     Returns:
         A 2-tuple of dicts. The first dict maps Pokemon (string) to the 
@@ -67,11 +78,16 @@ def get_abilities_hashmaps(data):
             abilities_to_pokemon_map[ability].append(pokemon_name)
     return (pokemon_to_abilities_map, abilities_to_pokemon_map)
 
-def get_pokemon_to_name_hashmaps(data):
-    '''Hash Pokemon to abilities.
+def get_pokemon_to_name_hashmaps(data: dict) -> dict:
+    '''Hash variable names to human-friendly names.
+    
+    The input file contains a lot of unneccessary information. This function
+    simply trims down the input.
     
     Arguments:
-        data (dict): Smogon's Pokedex data, converted to a dict.
+        data: Smogon's Pokedex data. A dict mapping Pokemon (string) to a dict.
+        This dict maps trait types (string) to specific traits (ints, strings,
+        dicts, etc.).
         
     Returns:
         A dict mapping variable names (string) to the UTF-encoded Pokemon 
