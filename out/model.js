@@ -43,7 +43,7 @@ var Model;
     Model.promises.push(fetch("./data/sprite_url/data_item_names_to_sprite_url.json")
         .then(function (response) { return response.json(); })
         .then(function (json) {
-        Model.item_to_image = json;
+        Model.items_to_image = json;
     }));
     Model.promises.push(fetch("./data/sprite_url/data_pkmn_names_to_sprite_url.json")
         .then(function (response) { return response.json(); })
