@@ -19,7 +19,7 @@ def write_to_json(file_name: str, dictionary: dict):
     text_file.write(string)
     text_file.close()
     
-def get_moves_hashmaps(data: dict) -> (dict, dict):
+def get_moves_hashmaps(data: dict, names: dict) -> (dict, dict):
     '''Hash Pokemon to moves.
     
     The input file contains a lot of unneccessary information. This function
@@ -27,9 +27,12 @@ def get_moves_hashmaps(data: dict) -> (dict, dict):
     
     Arguments:
         data: Smogon's Learnset data. A dict mapping Pokemon (string) to a dict
-        with a single key, "learnset" (string). The value of the associated 
-        with "learnset" is another dict, which maps moves (string) to the 
-        method by which the aforementioned Pokemon attains the move (string).
+            with a single key, "learnset" (string). The value of the associated 
+            with "learnset" is another dict, which maps moves (string) to the 
+            method by which the aforementioned Pokemon attains the move 
+            (string).
+        names: A dict mapping variable names (string) to user-friendly names
+            (string).
         
     Returns:
         A 2-tuple of dicts. The first dict maps Pokemon (string) to the moves
@@ -43,20 +46,23 @@ def get_moves_hashmaps(data: dict) -> (dict, dict):
             for move, move_sources in move_to_move_source_map.items():
                 for move_source in move_sources:
                     if move_source[0] == '8':
+                        display_name = names[pokemon_name]
                         try:
-                            moves_to_pokemon_map[move].append(pokemon_name)
+                            moves_to_pokemon_map[move].append(display_name)
                         except KeyError:
                             moves_to_pokemon_map[move] = []
-                            moves_to_pokemon_map[move].append(pokemon_name)                        
+                            moves_to_pokemon_map[move].append(display_name)                        
                         try:
-                            pokemon_to_moves_map[pokemon_name].append(move)
+                            pokemon_to_moves_map[display_name].append(move)
                         except KeyError:
-                            pokemon_to_moves_map[pokemon_name] = []
-                            pokemon_to_moves_map[pokemon_name].append(move)
+                            pokemon_to_moves_map[display_name] = []
+                            pokemon_to_moves_map[display_name].append(move)
                         break
     return (pokemon_to_moves_map, moves_to_pokemon_map)
 
-def get_abilities_hashmaps(data: dict, legal_pokemon: set) -> (dict, dict):
+
+def get_abilities_hashmaps(data: dict, names: dict, legal_pokemon: set) \
+-> (dict, dict):
     '''Hash Pokemon to abilities.
     
     The input file contains a lot of unneccessary information. This function
@@ -64,8 +70,10 @@ def get_abilities_hashmaps(data: dict, legal_pokemon: set) -> (dict, dict):
     
     Arguments:
         data: Smogon's Pokedex data. A dict mapping Pokemon (string) to a dict.
-        This dict maps trait types (string) to specific traits (ints, strings,
-        dicts, etc.).
+            This dict maps trait types (string) to specific traits (ints, 
+            strings, dicts, etc.).
+        names: A dict mapping variable names (string) to user-friendly names
+            (string).
         legal_pokemon: Set of Pokemon that exist in generation 8.
         
     Returns:
@@ -77,14 +85,15 @@ def get_abilities_hashmaps(data: dict, legal_pokemon: set) -> (dict, dict):
     abilities_to_pokemon_map = {}
     for pokemon_name, second_dict in data.items():
         if pokemon_name in legal_pokemon:
+            display_name = names[pokemon_name]
             abilities_list = getList(second_dict["abilities"].values())
-            pokemon_to_abilities_map[pokemon_name] = abilities_list      
+            pokemon_to_abilities_map[display_name] = abilities_list      
             for ability in abilities_list:
                 try:
-                    abilities_to_pokemon_map[ability].append(pokemon_name)
+                    abilities_to_pokemon_map[ability].append(display_name)
                 except KeyError:
                     abilities_to_pokemon_map[ability] = []
-                    abilities_to_pokemon_map[ability].append(pokemon_name)
+                    abilities_to_pokemon_map[ability].append(display_name)
     return (pokemon_to_abilities_map, abilities_to_pokemon_map)
 
 def get_legal_pokemon_set(data: dict) -> set:
@@ -95,7 +104,7 @@ def get_legal_pokemon_set(data: dict) -> set:
     
     Arguments:
         data: Smogon's Formats data. A dict mapping Pokemon (string) to their
-        availability in different generations.
+            availability in different generations.
         
     Returns:
         A set of Pokemon (string).
@@ -135,6 +144,7 @@ def get_pokemon_to_name_hashmaps(data: dict) -> list:
                 
 if __name__ == '__main__':
     legal_pokemon_set = set()
+    name_to_display_map = None
     
     with open('../data/data_formats.txt') as json_file:
         formats = json.load(json_file)
@@ -145,34 +155,32 @@ if __name__ == '__main__':
         # Get the Pokemon available in generation 8.
         write_to_json('../data/names/data_legal_pokemon.json', 
                       dummy_var)
+    
+    with open('../data/data_pokedex.txt', encoding='utf-8') as json_file:
+        pokedex = json.load(json_file)    
+        name_to_display_map = get_pokemon_to_name_hashmaps(pokedex)[0]
         
     with open('../data/data_learnsets.txt') as json_file:
         learnsets = json.load(json_file)
-        moves_hashmaps = get_moves_hashmaps(learnsets)
+        moves_hashmaps = get_moves_hashmaps(learnsets, name_to_display_map)
         
         # Get Pokemon-to-moves JSON.
         write_to_json('../data/moves/data_pokemon_to_moves.json', 
                       moves_hashmaps[0])     
         write_to_json('../data/moves/data_moves_to_pokemon.json', 
                       moves_hashmaps[1])
- 
+        
     with open('../data/data_pokedex.txt', encoding='utf-8') as json_file:
         pokedex = json.load(json_file)
-        abilities_hashmaps = get_abilities_hashmaps(pokedex, legal_pokemon_set)
-        
-        
+        abilities_hashmaps = get_abilities_hashmaps(pokedex, \
+                                                    name_to_display_map, \
+                                                    legal_pokemon_set)
+    
         # Get Pokemon-to-abilities JSON.
         write_to_json('../data/abilities/data_pokemon_to_abilities.json', 
                       abilities_hashmaps[0])     
         write_to_json('../data/abilities/data_abilities_to_pokemon.json', 
                       abilities_hashmaps[1])
-    
-        name_hashmaps = get_pokemon_to_name_hashmaps(pokedex)
-        # Get variable-to-name JSON.
-        write_to_json('../data/names/data_name_to_display.json', 
-                      name_hashmaps[0])
-        write_to_json('../data/names/data_display_to_name.json', 
-                      name_hashmaps[1])
         
     
 
