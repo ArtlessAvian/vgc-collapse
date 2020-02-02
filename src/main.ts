@@ -11,6 +11,7 @@ Promise.all(Model.promises)
         $("#back-1").click(function() {main.backstep(); updateEverything();});
         $("#forward-1").click(function() {main.step(); updateEverything();});
         $("#forward-5").click(function() {for (let i = 0; i < 3 && main.step() >= 0; i++); updateEverything();});
+        $("#print").click(function() {alert(main.pos.toString())});
         // $("select/").select(function(event) {})
         $("select").on("select2:selecting", function(event) {
             // console.log(event, this);
