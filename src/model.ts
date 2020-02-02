@@ -57,7 +57,7 @@ namespace Model
             items_to_pokemon = json; items_sorted = Object.keys(json).sort();
         }));
 
-    promises.push(fetch("./data/sprite_url/data_pokemon_to_types.json")
+    promises.push(fetch("./data/types/data_pokemon_to_types.json")
         .then(response => response.json())
         .then(function(json) {
             pokemon_to_types = json;
