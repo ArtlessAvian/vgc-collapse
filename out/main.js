@@ -10,6 +10,7 @@ Promise.all(Model.promises)
         $("#forward-1").click(function () { main.step(); updateEverything(); });
         $("#forward-5").click(function () { for (var i = 0; i < 3 && main.step() >= 0; i++)
             ; updateEverything(); });
+        $("#print").click(function () { alert(main.pos.toString()); });
         $("select").on("select2:selecting", function (event) {
             var text = event.params.args.data.text;
             var idLen = (this.id).length;

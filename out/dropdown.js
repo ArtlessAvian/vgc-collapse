@@ -2,13 +2,14 @@ var Dropdown;
 (function (Dropdown) {
     function createPokemonNameDropdown(pokemon, i) {
         var dropdown = document.getElementById("dropdown-" + i + "-0");
+        var image = document.getElementById("img-" + i);
         var txt;
         if (pokemon.length === 1) {
-            var image = document.getElementById("img-" + i);
             txt = "<option value='" + pokemon[0] + "' disabled selected hidden>" + pokemon[0] + "</option>";
             $(image).attr("src", Model.pokemon_to_image[pokemon[0]]);
         }
         else {
+            $(image).attr("src", "whosthat.png");
             txt = "<option value='' disabled selected hidden>-----</option>";
             var p = void 0;
             for (var _i = 0, pokemon_1 = pokemon; _i < pokemon_1.length; _i++) {

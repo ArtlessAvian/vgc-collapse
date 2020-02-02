@@ -35,6 +35,11 @@ var Model;
         Model.items_to_pokemon = json;
         Model.items_sorted = Object.keys(json).sort();
     }));
+    Model.promises.push(fetch("./data/types/data_pokemon_to_types.json")
+        .then(function (response) { return response.json(); })
+        .then(function (json) {
+        Model.pokemon_to_types = json;
+    }));
     Model.promises.push(fetch("./data/names/data_display_to_names.json")
         .then(function (response) { return response.json(); })
         .then(function (json) {

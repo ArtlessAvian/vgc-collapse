@@ -47,7 +47,7 @@ class TeamSuperposition
 
     public collapse(observation : number)
     {
-        console.log(this.matrix[observation]);
+        // console.log(this.matrix[observation]);
         if (this.matrix[observation].length == 1)
         {
             // species clause
@@ -58,7 +58,7 @@ class TeamSuperposition
                     let index = this.matrix[i].indexOf(this.matrix[observation][0]);
                     if (i != observation && index != -1)
                     {
-                        console.log("removed " + this.matrix[observation][0])
+                        // console.log("removed " + this.matrix[observation][0])
                         this.matrix[i].splice(this.matrix[i].indexOf(this.matrix[observation][0]), 1);
                         this.collapse(i);
                     }
@@ -79,9 +79,14 @@ class TeamSuperposition
             }
         }
 
-        console.log(Math.floor(observation/PokemonSuperposition.pokemonSize), observation % PokemonSuperposition.pokemonSize);
+        // console.log(Math.floor(observation/PokemonSuperposition.pokemonSize), observation % PokemonSuperposition.pokemonSize);
         this.members[Math.floor(observation/PokemonSuperposition.pokemonSize)].collapse(observation % PokemonSuperposition.pokemonSize);
         // this.buildMatrix();
+    }
+
+    public toString()
+    {
+        return this.members.map(a => a.toString()).join("\n\n");
     }
 }
 
@@ -193,6 +198,11 @@ class PokemonSuperposition
         }
         // console.log("finshed " + observation, this.matrix[2]);
     }
+
+    public toString()
+    {
+        return `${this.matrix[0][0]} @ ${this.matrix[6][0]}\nAbility: ${this.matrix[1][0]}\nLevel: 50\n- ${this.matrix[2][0]}\n- ${this.matrix[3][0]}\n- ${this.matrix[4][0]}\n- ${this.matrix[5][0]}`;
+    }
 }
 
 class Collapser
@@ -265,8 +275,8 @@ class Collapser
     
         // let vector = randomElement(this.pos.state.filter(thingy => thingy.length > 1));
         let choices = this.pos.matrix.filter(vec => vec.length > 1)
-        // let smallest = Math.min.apply(Math, choices.map(choice => choice.length));
-        let vector = randomElement(choices); //.filter(vec => vec.length == smallest))
+        let smallest = Math.min.apply(Math, choices.map(choice => choice.length));
+        let vector = randomElement(choices.filter(vec => vec.length == smallest))
 
         let index = this.pos.matrix.indexOf(vector);
         let element = randomElement(vector);

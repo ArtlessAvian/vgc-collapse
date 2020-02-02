@@ -13,6 +13,8 @@ namespace Model
     export var moves_to_pokemon : Object;
     export var pokemon_to_items : Object;
     export var items_to_pokemon : Object;
+    
+    export var pokemon_to_types : Object;
 
     export var pokemon_to_image : Object;
     export var items_to_image : Object;
@@ -54,7 +56,13 @@ namespace Model
         .then(function(json) {
             items_to_pokemon = json; items_sorted = Object.keys(json).sort();
         }));
-    
+
+    promises.push(fetch("./data/types/data_pokemon_to_types.json")
+        .then(response => response.json())
+        .then(function(json) {
+            pokemon_to_types = json;
+        }));
+
     promises.push(fetch("./data/names/data_display_to_names.json")
         .then(response => response.json())
         .then(function(json) {

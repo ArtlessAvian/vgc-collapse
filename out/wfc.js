@@ -21,13 +21,11 @@ var TeamSuperposition = (function () {
         }
     };
     TeamSuperposition.prototype.collapse = function (observation) {
-        console.log(this.matrix[observation]);
         if (this.matrix[observation].length == 1) {
             if (observation % PokemonSuperposition.pokemonSize == 0) {
                 for (var i = 0; i < PokemonSuperposition.pokemonSize * 6; i += PokemonSuperposition.pokemonSize) {
                     var index = this.matrix[i].indexOf(this.matrix[observation][0]);
                     if (i != observation && index != -1) {
-                        console.log("removed " + this.matrix[observation][0]);
                         this.matrix[i].splice(this.matrix[i].indexOf(this.matrix[observation][0]), 1);
                         this.collapse(i);
                     }
@@ -43,8 +41,10 @@ var TeamSuperposition = (function () {
                 }
             }
         }
-        console.log(Math.floor(observation / PokemonSuperposition.pokemonSize), observation % PokemonSuperposition.pokemonSize);
         this.members[Math.floor(observation / PokemonSuperposition.pokemonSize)].collapse(observation % PokemonSuperposition.pokemonSize);
+    };
+    TeamSuperposition.prototype.toString = function () {
+        return this.members.map(function (a) { return a.toString(); }).join("\n\n");
     };
     return TeamSuperposition;
 }());
@@ -124,6 +124,9 @@ var PokemonSuperposition = (function () {
             }
         }
     };
+    PokemonSuperposition.prototype.toString = function () {
+        return this.matrix[0][0] + " @ " + this.matrix[6][0] + "\nAbility: " + this.matrix[1][0] + "\nLevel: 50\n- " + this.matrix[2][0] + "\n- " + this.matrix[3][0] + "\n- " + this.matrix[4][0] + "\n- " + this.matrix[5][0];
+    };
     PokemonSuperposition.pokemonSize = 7;
     return PokemonSuperposition;
 }());
@@ -169,7 +172,8 @@ var Collapser = (function () {
             return -1;
         }
         var choices = this.pos.matrix.filter(function (vec) { return vec.length > 1; });
-        var vector = randomElement(choices);
+        var smallest = Math.min.apply(Math, choices.map(function (choice) { return choice.length; }));
+        var vector = randomElement(choices.filter(function (vec) { return vec.length == smallest; }));
         var index = this.pos.matrix.indexOf(vector);
         var element = randomElement(vector);
         clearArray(this.pos.matrix[index]).push(element);
