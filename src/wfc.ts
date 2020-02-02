@@ -118,9 +118,9 @@ class PokemonSuperposition
 
     public collapse(observation : number, recursion_depth = 0) : void
     {
-        if (recursion_depth > 10)
+        if (recursion_depth > 20)
         {
-            console.log("RECURSION DEPTH EXCEEDED. Results might be wrong!");
+            console.log("RECURSION DEPTH EXCEEDED. Infinite loop? Results might be wrong!");
         }
 
         // console.log(this.matrix.map(vec => vec.join(", ")).join("\n\n"));
@@ -227,9 +227,9 @@ class Collapser
             this.history = this.history.slice(0, this.stepNumber);
             this.history.push(new TeamSuperposition(this.pos));
         }
-        else
+        else if (observation == -2)
         {
-            console.log("Done or contradiction");
+            // console.log("OBJECTION! Contradiction!");
             this.backstep();
             this.step();
         }
@@ -253,7 +253,7 @@ class Collapser
 
     public set(index : number, value : string)
     {
-        console.log(index, value);
+        // console.log(index, value);
         clearArray(this.pos.matrix[index]).push(value);
         this.pos.collapse(index);
         this.stepNumber++;
