@@ -37,19 +37,25 @@ def get_moves_hashmaps(data: dict, move_display_names: dict, threshold: float) -
     pokemon_to_moves_map = {}
     moves_to_pokemon_map = {}
     for pokemon_name, second_dict in data["data"].items():
-        for move, probability in second_dict["Moves"].items():
-            if probability > threshold and move != '':
-                move_display_name = move_display_names[move]
-                try:
-                    moves_to_pokemon_map[move_display_name].append(pokemon_name)
-                except KeyError:
-                    moves_to_pokemon_map[move_display_name] = []
-                    moves_to_pokemon_map[move_display_name].append(pokemon_name)                        
-                try:
-                    pokemon_to_moves_map[pokemon_name].append(move_display_name)
-                except KeyError:
-                    pokemon_to_moves_map[pokemon_name] = []
-                    pokemon_to_moves_map[pokemon_name].append(move_display_name)
+        counter = 0
+        for move, probability in sorted(second_dict["Moves"].items(), key = lambda x : -x[1]):
+            if move == '':
+                continue
+            move_display_name = move_display_names[move]
+            try:
+                moves_to_pokemon_map[move_display_name].append(pokemon_name)
+            except KeyError:
+                moves_to_pokemon_map[move_display_name] = []
+                moves_to_pokemon_map[move_display_name].append(pokemon_name)                        
+            try:
+                pokemon_to_moves_map[pokemon_name].append(move_display_name)
+            except KeyError:
+                pokemon_to_moves_map[pokemon_name] = []
+                pokemon_to_moves_map[pokemon_name].append(move_display_name)
+            counter += 1
+            if counter == 20:
+                break
+            
     return (pokemon_to_moves_map, moves_to_pokemon_map)
 
 
@@ -339,7 +345,7 @@ if __name__ == '__main__':
     # Get Pokemon-to-moves and Pokemon-to-items JSON.        
     with open('../data/gen8vgc2020-1760.json') as json_file:
         usage_stats = json.load(json_file)
-        moves_hashmaps = get_moves_hashmaps(usage_stats, moves_to_display_map, 1)
+        moves_hashmaps = get_moves_hashmaps(usage_stats, moves_to_display_map, 0)
         
         write_to_json('../data/moves/data_pokemon_to_moves.json', 
                       moves_hashmaps[0])     
