@@ -4,10 +4,14 @@ namespace Model
     export var moves_sorted : string[];
     export var abilities_sorted : string[];
 
+    export var names_sorted : string[];
+
     export var pokemon_to_abilities : Object;
     export var abilities_to_pokemon : Object;
     export var pokemon_to_moves : Object;
     export var moves_to_pokemon : Object;
+
+    export var display_to_names : Object;
 
     export var promises : Array<Promise<void>> = [];
     
@@ -31,5 +35,11 @@ namespace Model
         .then(response => response.json())
         .then(function(json) {
             moves_to_pokemon = json; moves_sorted = Object.keys(json).sort();
+        }));
+
+    promises.push(fetch("./data/names/data_display_to_names.json")
+        .then(response => response.json())
+        .then(function(json) {
+            display_to_names = json; names_sorted = Object.keys(json).sort();
         }));
 }
