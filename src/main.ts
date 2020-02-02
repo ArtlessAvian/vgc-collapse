@@ -11,7 +11,11 @@ Promise.all(Model.promises)
         $("#forward-5").click(function() {main.fiveStep()});
         // $("select/").select(function(event) {})
         $("select").on("select2:selecting", function(event) {
-            console.log(event, this);
+            // console.log(event, this);
+            let pokemon = event.params.args.data.text;
+            let cardNum = (this.id).charAt((this.id).length-1);
+            // console.log(pokemon);
+            // console.log(cardNum);
         }); //main.update
     });
 

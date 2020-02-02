@@ -7,7 +7,8 @@ Promise.all(Model.promises)
         $("#forward-1").click(function () { main.step(); });
         $("#forward-5").click(function () { main.fiveStep(); });
         $("select").on("select2:selecting", function (event) {
-            console.log(event, this);
+            var pokemon = event.params.args.data.text;
+            var cardNum = (this.id).charAt((this.id).length - 1);
         });
     });
     Dropdown.createPokemonNameDropdown(main.pos.matrix[0]);
