@@ -218,7 +218,12 @@ if __name__ == '__main__':
     # Get display names.
     with open('../data/data_pokedex.txt', encoding='utf-8') as json_file:
         pokedex = json.load(json_file)    
-        name_to_display_map = get_pokemon_to_name_hashmaps(pokedex)[0]
+        pkmn_name_hashmaps = get_pokemon_to_name_hashmaps(pokedex)
+        name_to_display_map = pkmn_name_hashmaps[0]
+        
+        display_to_name_map = pkmn_name_hashmaps[1]
+        write_to_json('../data/names/data_display_to_names.json', 
+                      display_to_name_map)     
         
     with open('../data/data_moves.txt', encoding='utf-8') as json_file:
         moves = json.load(json_file)    
