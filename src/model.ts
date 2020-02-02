@@ -15,7 +15,7 @@ namespace Model
     export var items_to_pokemon : Object;
 
     export var pokemon_to_image : Object;
-    export var item_to_image : Object;
+    export var items_to_image : Object;
     
     export var display_to_names : Object;
 
@@ -64,7 +64,7 @@ namespace Model
     promises.push(fetch("./data/sprite_url/data_item_names_to_sprite_url.json")
         .then(response => response.json())
         .then(function(json) {
-            item_to_image = json;
+            items_to_image = json;
         }));
 
     promises.push(fetch("./data/sprite_url/data_pkmn_names_to_sprite_url.json")

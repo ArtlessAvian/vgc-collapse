@@ -21,8 +21,29 @@ var TeamSuperposition = (function () {
         }
     };
     TeamSuperposition.prototype.collapse = function (observation) {
+        console.log(this.matrix[observation]);
+        if (this.matrix[observation].length == 1) {
+            if (observation % PokemonSuperposition.pokemonSize == 0) {
+                for (var i = 0; i < PokemonSuperposition.pokemonSize * 6; i += PokemonSuperposition.pokemonSize) {
+                    var index = this.matrix[i].indexOf(this.matrix[observation][0]);
+                    if (i != observation && index != -1) {
+                        console.log("removed " + this.matrix[observation][0]);
+                        this.matrix[i].splice(this.matrix[i].indexOf(this.matrix[observation][0]), 1);
+                        this.collapse(i);
+                    }
+                }
+            }
+            if (observation % PokemonSuperposition.pokemonSize == 6) {
+                for (var i = 6; i < PokemonSuperposition.pokemonSize * 6; i += PokemonSuperposition.pokemonSize) {
+                    var index = this.matrix[i].indexOf(this.matrix[observation][0]);
+                    if (i != observation && index != -1) {
+                        this.matrix[i].splice(this.matrix[i].indexOf(this.matrix[observation][0]), 1);
+                        this.collapse(i);
+                    }
+                }
+            }
+        }
         console.log(Math.floor(observation / PokemonSuperposition.pokemonSize), observation % PokemonSuperposition.pokemonSize);
-        ;
         this.members[Math.floor(observation / PokemonSuperposition.pokemonSize)].collapse(observation % PokemonSuperposition.pokemonSize);
     };
     return TeamSuperposition;
@@ -84,10 +105,12 @@ var PokemonSuperposition = (function () {
             }
         }
         else if (observation >= 2 && observation <= 5) {
-            for (var i = 2; i <= 5; i++) {
-                var index = this.matrix[i].indexOf(this.matrix[observation][0]);
-                if (i != observation && index != -1) {
-                    this.matrix[i].splice(this.matrix[i].indexOf(this.matrix[observation][0]), 1);
+            if (this.matrix[observation].length == 1) {
+                for (var i = 2; i <= 5; i++) {
+                    var index = this.matrix[i].indexOf(this.matrix[observation][0]);
+                    if (i != observation && index != -1) {
+                        this.matrix[i].splice(this.matrix[i].indexOf(this.matrix[observation][0]), 1);
+                    }
                 }
             }
             var possible_pokemon_2 = [];
