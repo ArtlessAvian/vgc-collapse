@@ -23,6 +23,7 @@ body {
         "footer  footer  footer";
     
     font-family: 'Montserrat', sans-serif;
+    overflow: hidden;
 }
 
 header {
@@ -51,7 +52,6 @@ header {
 
     border-radius: 20px;
     /* box-shadow: 2px 2px 15px rgba(80, 80, 80, 0.5); */
-    overflow: auto;
 }
 
 .pokemon-card {
