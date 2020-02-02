@@ -41,13 +41,13 @@ def get_moves_hashmaps(data: dict) -> (dict, dict):
     for pokemon_name, second_dict in data.items():
         for learnset, move_to_move_source_map in second_dict.items():
             moves = getList(move_to_move_source_map.keys())
-            
             pokemon_to_moves_map[pokemon_name] = moves
-            
             for move in moves:
-                if move not in moves_to_pokemon_map:
+                try:
+                    moves_to_pokemon_map[move].append(pokemon_name)
+                except KeyError:
                     moves_to_pokemon_map[move] = []
-                moves_to_pokemon_map[move].append(pokemon_name)
+                    moves_to_pokemon_map[move].append(pokemon_name)
     return (pokemon_to_moves_map, moves_to_pokemon_map)
 
 def get_abilities_hashmaps(data: dict) -> (dict, dict):
@@ -70,12 +70,13 @@ def get_abilities_hashmaps(data: dict) -> (dict, dict):
     abilities_to_pokemon_map = {}
     for pokemon_name, second_dict in data.items():
         abilities_list = getList(second_dict["abilities"].values())
-        pokemon_to_abilities_map[pokemon_name] = abilities_list
-        
+        pokemon_to_abilities_map[pokemon_name] = abilities_list      
         for ability in abilities_list:
-            if ability not in abilities_to_pokemon_map:
+            try:
+                abilities_to_pokemon_map[ability].append(pokemon_name)
+            except KeyError:
                 abilities_to_pokemon_map[ability] = []
-            abilities_to_pokemon_map[ability].append(pokemon_name)
+                abilities_to_pokemon_map[ability].append(pokemon_name)
     return (pokemon_to_abilities_map, abilities_to_pokemon_map)
 
 def get_pokemon_to_name_hashmaps(data: dict) -> dict:
