@@ -1,3 +1,6 @@
+// Convert objects to JSON. These files will be parsed further in a Python 
+// script.
+
 var Learnsets = require('../pokemon-showdown-master/data/learnsets.js');
 var Pokedex = require('../pokemon-showdown-master/data/pokedex.js');
 
