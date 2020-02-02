@@ -1,17 +1,26 @@
 var PokemonSuperposition = (function () {
     function PokemonSuperposition(copy) {
         this.matrix = [];
-        if (copy == null) {
-            this.matrix.push(["Dragapult", "Arcanine", "Excadrill", "Whimsicott", "Togekiss", "Gastrodon"]);
-            this.matrix.push(["Life Orb", "Weakness Policy", "Lum Berry", "Choice Specs", "Focus Sash"]);
+        if (copy == undefined) {
+            this.matrix.push(Object.keys(Model.pokemon_to_moves));
+            this.matrix.push(Object.keys(Model.moves_to_pokemon));
+            this.matrix.push(this.matrix[1]);
+            this.matrix.push(this.matrix[1]);
+            this.matrix.push(this.matrix[1]);
         }
         else {
             this.matrix.push(copy.matrix[0].slice());
             this.matrix.push(copy.matrix[1].slice());
+            this.matrix.push(this.matrix[1]);
+            this.matrix.push(this.matrix[1]);
+            this.matrix.push(this.matrix[1]);
         }
     }
     PokemonSuperposition.prototype.collapse = function (observation) {
-        console.log(observation);
+        var dirty = [observation];
+        while (dirty.length > 0) {
+            var index = dirty.pop();
+        }
     };
     return PokemonSuperposition;
 }());

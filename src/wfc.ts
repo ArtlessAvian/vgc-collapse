@@ -10,26 +10,34 @@ class PokemonSuperposition
     constructor(copy? : PokemonSuperposition)
     {
         this.matrix = [];
-        if (copy == null)
+        if (copy == undefined)
         {
-            this.matrix.push(["Dragapult", "Arcanine", "Excadrill", "Whimsicott", "Togekiss", "Gastrodon"]);
-            this.matrix.push(["Life Orb", "Weakness Policy", "Lum Berry", "Choice Specs", "Focus Sash"]);
+            this.matrix.push(Object.keys(Model.pokemon_to_moves));
+            this.matrix.push(Object.keys(Model.moves_to_pokemon));
+            this.matrix.push(this.matrix[1]);
+            this.matrix.push(this.matrix[1]);
+            this.matrix.push(this.matrix[1]);
+            // this.matrix.push(["Dragapult", "Arcanine", "Excadrill", "Whimsicott", "Togekiss", "Gastrodon"]);
+            // this.matrix.push(["Life Orb", "Weakness Policy", "Lum Berry", "Choice Specs", "Focus Sash"]);
         }
         else
         {
             this.matrix.push(copy.matrix[0].slice());
             this.matrix.push(copy.matrix[1].slice());
+            this.matrix.push(this.matrix[1]);
+            this.matrix.push(this.matrix[1]);
+            this.matrix.push(this.matrix[1]);
         }
     }
 
     public collapse(observation : number) : void
     {
-    //     let dirty = [observation];
-    //     while (dirty.length > 0)
-    //     {
-    //         dirty.pop()
-    //     }
-        console.log(observation);
+        let dirty = [observation];
+        while (dirty.length > 0)
+        {
+            let index = dirty.pop()
+
+        }
     }
 }
 
@@ -90,7 +98,6 @@ class Collapser
         return index;
     }
 }
-
 let instance : Collapser = new Collapser();
 
 function randomInt(start : number, end : number)
