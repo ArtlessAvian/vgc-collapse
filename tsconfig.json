@@ -1,5 +1,9 @@
 {
     "compilerOptions": {
+        "lib" : [
+            "esnext",
+            "dom"
+        ],
         "module": "commonjs",
         "removeComments": true,
         "target": "ES5",

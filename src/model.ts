@@ -1,10 +1,19 @@
 namespace Model
 {
-    // export var progress_remaining = 2;
+    export var pokemon_sorted : string[];
+    export var moves_sorted : string[];
     export var moves_to_pokemon : Object;
     export var pokemon_to_moves : Object;
-    // fetch("./data/moves/data_moves_to_pokemon.json").then(function(response){moves_to_pokemon = response.json(); progress_remaining--; })
-    // fetch("./data/moves/data_pokemon_to_moves.json").then(function(response){pokemon_to_moves = response.json(); progress_remaining--; })
-}
 
-console.log(Model);
+    export var promises : Array<Promise<void>> = [];
+    promises.push(fetch("./data/moves/data_pokemon_to_moves.json")
+        .then(response => response.json())
+        .then(function(json) {
+            pokemon_to_moves = json; pokemon_sorted = Object.keys(json).sort();
+        }));
+    promises.push(fetch("./data/moves/data_moves_to_pokemon.json")
+        .then(response => response.json())
+        .then(function(json) {
+            moves_to_pokemon = json; moves_sorted = Object.keys(json).sort();
+        }));
+}
