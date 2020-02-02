@@ -21,8 +21,16 @@ Promise.all(Model.promises)
         }); //main.update
     });
 
+    // console.log(main.pos.matrix)
+    
+    function updateCard(cardNum : number, matrix : string[][]) {
+        console.log(cardNum);
+        console.log(matrix);
 
-    Dropdown.createPokemonNameDropdown(main.pos.matrix[0])
+    }
+
+    Dropdown.createPokemonNameDropdown(main.pos.matrix[0]);
+    Dropdown.createPokemonMoveDropdown(main.pos.matrix[5]);
 
     console.log("Main Ready!");
 })

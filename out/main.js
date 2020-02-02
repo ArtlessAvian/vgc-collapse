@@ -13,6 +13,11 @@ Promise.all(Model.promises)
             main.set(cardNum * 6 - 6, pokemon);
         });
     });
+    function updateCard(cardNum, matrix) {
+        console.log(cardNum);
+        console.log(matrix);
+    }
     Dropdown.createPokemonNameDropdown(main.pos.matrix[0]);
+    Dropdown.createPokemonMoveDropdown(main.pos.matrix[5]);
     console.log("Main Ready!");
 });
