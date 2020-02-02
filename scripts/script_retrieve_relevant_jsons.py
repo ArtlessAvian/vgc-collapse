@@ -95,7 +95,8 @@ def get_legal_pokemon_list(data: dict) -> dict:
     pokemon_list = []
     for pokemon_name, secondary_dict in data.items():
         try:
-            if secondary_dict["tier"] != "Unreleased":
+            if secondary_dict["tier"] != "Unreleased" \
+                    and secondary_dict["tier"] != "Illegal":
                 pokemon_list.append(pokemon_name)
         except KeyError:
             pass
