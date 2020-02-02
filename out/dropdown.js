@@ -4,7 +4,9 @@ var Dropdown;
         var dropdown = document.getElementById("dropdown-" + i + "-0");
         var txt;
         if (pokemon.length === 1) {
+            var image = document.getElementById("img-" + i);
             txt = "<option value='" + pokemon[0] + "' disabled selected hidden>" + pokemon[0] + "</option>";
+            $(image).attr("src", Model.pokemon_to_image[pokemon[0]]);
         }
         else {
             txt = "<option value='' disabled selected hidden>-----</option>";

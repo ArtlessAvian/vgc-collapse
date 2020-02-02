@@ -1,16 +1,19 @@
 namespace Dropdown
 {
-    export function createPokemonNameDropdown<T>(pokemon : Array<T>, i : number)
+    export function createPokemonNameDropdown(pokemon : Array<string>, i : number)
     {
         let dropdown = document.getElementById("dropdown-" + i + "-0");
         let txt : string;
 
         if (pokemon.length === 1) {
+            let image = document.getElementById("img-" + i);
             txt = "<option value='" + pokemon[0] + "' disabled selected hidden>" + pokemon[0] + "</option>";
+            $(image).attr("src", Model.pokemon_to_image[pokemon[0]]);
+
         } else
         {
             txt = "<option value='' disabled selected hidden>-----</option>";
-            let p : T;
+            let p : string;
             for (p of pokemon)
             {
                 txt += "<option>" + p + "</option>";
@@ -20,7 +23,7 @@ namespace Dropdown
 
     }
 
-    export function createPokemonAbilityDropdown<T>(abilities : Array<T>, i : number,)
+    export function createPokemonAbilityDropdown(abilities : Array<string>, i : number,)
     {
             // Iterate through each possible pokemon move
             let dropdown = document.getElementById("dropdown-" + i + "-1");
@@ -31,7 +34,7 @@ namespace Dropdown
             } else
             {
                 txt = "<option value='' disabled selected hidden>-----</option>";
-                let a : T;
+                let a : string;
                 for (a of abilities)
                 {
                     txt += "<option>" + a + "</option>";
@@ -40,7 +43,7 @@ namespace Dropdown
             dropdown.innerHTML = txt;
     }
     
-    export function createPokemonMoveDropdown<T>(moves : Array<T>, i : number, j : number)
+    export function createPokemonMoveDropdown(moves : Array<string>, i : number, j : number)
     {
         let dropdown = document.getElementById("dropdown-" + i + "-" + j);
         let txt : string;
@@ -49,7 +52,7 @@ namespace Dropdown
         } else
         {
             txt = "<option value='' disabled selected hidden>-----</option>";
-            let m : T;
+            let m : string;
             for (m of moves)
             {
                 txt += "<option>" + m + "</option>";
@@ -58,7 +61,7 @@ namespace Dropdown
         dropdown.innerHTML = txt;        
     }
 
-    export function createPokemonItemDropdown<T>(items : Array<T>, i : number)
+    export function createPokemonItemDropdown(items : Array<string>, i : number)
     {
         let dropdown = document.getElementById("dropdown-" + i + "-6");
         let txt : string;
@@ -67,7 +70,7 @@ namespace Dropdown
         } else
         {
             txt = "<option value='' disabled selected hidden>-----</option>";
-            let i : T;
+            let i : string;
             for (i of items)
             {
                 txt += "<option>" + i + "</option>";
