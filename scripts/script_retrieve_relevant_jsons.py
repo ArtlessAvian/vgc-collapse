@@ -16,20 +16,14 @@ def write_to_json(file_name: str, info: dict):
     text_file.write(string)
     text_file.close()
     
-def get_moves_hashmaps(data: dict, pkmn_display_names: dict, \
-                       move_display_names: dict) -> (dict, dict):
+def get_moves_hashmaps(data: dict, move_display_names: dict) -> (dict, dict):
     '''Hash Pokemon to moves.
     
     The input file contains a lot of unneccessary information. This function
     simply trims down the input.
     
     Arguments:
-        data: Smogon's Learnset data. A dict mapping Pokemon (string) to dicts
-            with a single key, "learnset" (string). The value associated with
-            "learnset" is another dict, which maps moves (string) to the method
-            by which the aforementioned Pokemon attains the move (string).
-        pkmn_display_names: A dict mapping Pokemon variable names (string) to 
-            user-friendly display names (string).
+        data: Smogon's usage statistics.
         move_display_names: A dict mapping move variable names (string) to 
             user-friendly display names (string).
         
@@ -40,24 +34,20 @@ def get_moves_hashmaps(data: dict, pkmn_display_names: dict, \
     '''
     pokemon_to_moves_map = {}
     moves_to_pokemon_map = {}
-    for pokemon_name, second_dict in data.items():
-        for learnset, move_to_move_source_map in second_dict.items():
-            for move, move_sources in move_to_move_source_map.items():
-                for move_source in move_sources:
-                    if move_source[0] == '8':
-                        pkmn_display_name = pkmn_display_names[pokemon_name]
-                        move_display_name = move_display_names[move]
-                        try:
-                            moves_to_pokemon_map[move_display_name].append(pkmn_display_name)
-                        except KeyError:
-                            moves_to_pokemon_map[move_display_name] = []
-                            moves_to_pokemon_map[move_display_name].append(pkmn_display_name)                        
-                        try:
-                            pokemon_to_moves_map[pkmn_display_name].append(move_display_name)
-                        except KeyError:
-                            pokemon_to_moves_map[pkmn_display_name] = []
-                            pokemon_to_moves_map[pkmn_display_name].append(move_display_name)
-                        break
+    for pokemon_name, second_dict in data["data"].items():
+        for move, probability in second_dict["Moves"].items():
+            if probability > 0.2 and move != '':
+                move_display_name = move_display_names[move]
+                try:
+                    moves_to_pokemon_map[move_display_name].append(pokemon_name)
+                except KeyError:
+                    moves_to_pokemon_map[move_display_name] = []
+                    moves_to_pokemon_map[move_display_name].append(pokemon_name)                        
+                try:
+                    pokemon_to_moves_map[pokemon_name].append(move_display_name)
+                except KeyError:
+                    pokemon_to_moves_map[pokemon_name] = []
+                    pokemon_to_moves_map[pokemon_name].append(move_display_name)
     return (pokemon_to_moves_map, moves_to_pokemon_map)
 
 
@@ -220,7 +210,7 @@ def get_pokemon_to_sprite_url_hashmap(pkmn_display_names: dict, \
         pkmn_to_sprite_url_map[pkmn_display_name] = url_base + url_suffix
     return pkmn_to_sprite_url_map
 
-def get_items(data: dict):
+def get_items_to_name_hashmap(data: dict):
     '''Retrieve items.
     
     The input file contains a lot of unneccessary information. This function
@@ -234,14 +224,33 @@ def get_items(data: dict):
     Returns:
         A list of items (string).
     '''
-    items = []
+    items = {}
     for item, secondary_dict in data.items():
         try:
             if secondary_dict["isNonstandard"] != None:
                 pass
         except:
-            items.append(secondary_dict["name"])
+            items[item] = secondary_dict["name"]
     return items
+
+def get_items_hashmap(data: dict, item_display_names: dict):
+    pokemon_to_items_map = {}
+    items_to_pokemon_map = {}
+    for pokemon_name, second_dict in data["data"].items():
+        for item, probability in second_dict["Items"].items():
+            if probability > 0.2 and item != "nothing":
+                item_display_name = item_display_names[item]
+                try:
+                    items_to_pokemon_map[item_display_name].append(pokemon_name)
+                except KeyError:
+                    items_to_pokemon_map[item_display_name] = []
+                    items_to_pokemon_map[item_display_name].append(pokemon_name)                        
+                try:
+                    pokemon_to_items_map[pokemon_name].append(item_display_name)
+                except KeyError:
+                    pokemon_to_items_map[pokemon_name] = []
+                    pokemon_to_items_map[pokemon_name].append(item_display_name)
+    return (pokemon_to_items_map, items_to_pokemon_map)
 
 def get_items_to_sprite_url_hashmap(items: list):
     '''
@@ -253,7 +262,7 @@ def get_items_to_sprite_url_hashmap(items: list):
     '''
     items_to_sprite_url_map = {}
     url_base = "https://img.pokemondb.net/sprites/items/"
-    for item in items:
+    for item in items.values():
         url_suffix = '-'.join(item.lower().split(' ')) + ".png"
         items_to_sprite_url_map[item] = url_base + url_suffix
     return items_to_sprite_url_map
@@ -262,6 +271,7 @@ if __name__ == '__main__':
     legal_pokemon_set = set()
     pkmn_name_to_display_map = None
     moves_to_display_map = None
+    items_to_display_map = None
     
    # Get the Pokemon available in generation 8.
     with open('../data/data_formats.txt') as json_file:
@@ -290,12 +300,9 @@ if __name__ == '__main__':
     # Get items.
     with open('../data/data_items.txt', encoding='utf-8') as json_file:
         items_json = json.load(json_file)
-        items = get_items(items_json)
-        
-        dummy_var = {}
-        dummy_var["items"] = items
-        
-        write_to_json('../data/items/data_items.json', dummy_var)
+        items_to_display_map = get_items_to_name_hashmap(items_json)
+
+    
         
     # Get sprite urls.
     pkmn_to_sprite_url_map = \
@@ -304,23 +311,28 @@ if __name__ == '__main__':
     write_to_json('../data/sprite_url/data_pkmn_names_to_sprite_url.json', 
                       pkmn_to_sprite_url_map)
     
-    items_to_sprite_url_map = get_items_to_sprite_url_hashmap(items)
+    items_to_sprite_url_map = get_items_to_sprite_url_hashmap(items_to_display_map)
     write_to_json('../data/sprite_url/data_item_names_to_sprite_url.json', \
                   items_to_sprite_url_map)
     
 
     
     # Get Pokemon-to-moves JSON.        
-    with open('../data/data_learnsets.txt') as json_file:
-        learnsets = json.load(json_file)
-        moves_hashmaps = get_moves_hashmaps(learnsets, \
-                                            pkmn_name_to_display_map, \
-                                            moves_to_display_map)
+    with open('../data/gen8vgc2020-1760.json') as json_file:
+        usage_stats = json.load(json_file)
+        moves_hashmaps = get_moves_hashmaps(usage_stats, moves_to_display_map)
         
         write_to_json('../data/moves/data_pokemon_to_moves.json', 
                       moves_hashmaps[0])     
         write_to_json('../data/moves/data_moves_to_pokemon.json', 
                       moves_hashmaps[1])
+        
+        items_hashmaps = get_items_hashmap(usage_stats, items_to_display_map)
+        write_to_json('../data/items/data_pokemon_to_items.json', 
+                      items_hashmaps[0])     
+        write_to_json('../data/items/data_items_to_pokemon.json', 
+                      items_hashmaps[1])
+        
         
     # Get Pokemon-to-abilities JSON and Pokemon-to-types JSON.
     with open('../data/data_pokedex.txt', encoding='utf-8') as json_file:
