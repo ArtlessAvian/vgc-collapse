@@ -1,2 +1,3 @@
-!pokemon-showdown-master/data/*
-pokemon-showdown-master/
+pokemon-showdown-master/*
+!pokemon-showdown-master/data
+
