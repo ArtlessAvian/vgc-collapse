@@ -15,6 +15,9 @@ var Dropdown;
                 type = typesArr_1[_i];
                 typeTxt += "<div class='type " + type + "'>" + type + "</div>";
             }
+            if (typesArr.length === 1) {
+                typeTxt += "<div class='type empty'></div>";
+            }
         }
         else {
             $(image).attr("src", "whosthat.png");
@@ -24,6 +27,7 @@ var Dropdown;
                 p = pokemon_1[_a];
                 txt += "<option>" + p + "</option>";
             }
+            typeTxt += "<div class='type empty'></div><div class='type empty'></div>";
         }
         dropdown.innerHTML = txt;
         types.innerHTML = typeTxt;

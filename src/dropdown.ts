@@ -18,6 +18,11 @@ namespace Dropdown
             {
                 typeTxt += "<div class='type " + type + "'>" + type + "</div>";
             }
+
+            if (typesArr.length === 1) {
+                typeTxt += "<div class='type empty'></div>";
+            }
+
         } else
         {
             $(image).attr("src", "whosthat.png");
@@ -27,6 +32,7 @@ namespace Dropdown
             {
                 txt += "<option>" + p + "</option>";
             }
+            typeTxt += "<div class='type empty'></div><div class='type empty'></div>";
         }
         dropdown.innerHTML = txt;
         types.innerHTML = typeTxt;
