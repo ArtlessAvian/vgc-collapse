@@ -336,7 +336,7 @@ if __name__ == '__main__':
     
 
 
-    # Get Pokemon-to-moves JSON.        
+    # Get Pokemon-to-moves and Pokemon-to-items JSON.        
     with open('../data/gen8vgc2020-1760.json') as json_file:
         usage_stats = json.load(json_file)
         moves_hashmaps = get_moves_hashmaps(usage_stats, moves_to_display_map, 0.01)
