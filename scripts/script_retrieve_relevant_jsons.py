@@ -79,8 +79,30 @@ def get_abilities_hashmaps(data: dict) -> (dict, dict):
                 abilities_to_pokemon_map[ability].append(pokemon_name)
     return (pokemon_to_abilities_map, abilities_to_pokemon_map)
 
-def get_pokemon_to_name_hashmaps(data: dict) -> dict:
+def get_legal_pokemon_list(data: dict) -> dict:
     '''Hash variable names to human-friendly names.
+    
+    The input file contains a lot of unneccessary information. This function
+    simply trims down the input.
+    
+    Arguments:
+        data: Smogon's Formats data. A dict mapping Pokemon (string) to their
+        availability in different generations.
+        
+    Returns:
+        A list of Pokemon (string).
+    '''
+    pokemon_list = []
+    for pokemon_name, secondary_dict in data.items():
+        try:
+            if secondary_dict["tier"] != "Unreleased":
+                pokemon_list.append(pokemon_name)
+        except KeyError:
+            pass
+    return pokemon_list
+
+def get_pokemon_to_name_hashmaps(data: dict) -> list:
+    '''Retrieve Pokemon in the gen 8 pokedex.
     
     The input file contains a lot of unneccessary information. This function
     simply trims down the input.
@@ -125,3 +147,12 @@ if __name__ == '__main__':
         write_to_json('../data/names/data_pokemon_to_name.json', 
                       get_pokemon_to_name_hashmaps(pokedex))
     
+    with open('../data/data_formats.txt') as json_file:
+        formats = json.load(json_file)
+        pokemon_list = get_legal_pokemon_list(formats)
+        dummy_var = {}
+        dummy_var["pokemon_list"] = pokemon_list
+        
+        write_to_json('../data/names/data_legal_pokemon.json', 
+                      dummy_var)
+                      
