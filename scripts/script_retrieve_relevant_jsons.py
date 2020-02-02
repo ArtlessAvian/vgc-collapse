@@ -202,7 +202,7 @@ def get_moves_to_name_hashmaps(data: dict) -> (dict, dict):
 
 if __name__ == '__main__':
     legal_pokemon_set = set()
-    name_to_display_map = None
+    pkmn_name_to_display_map = None
     moves_to_display_map = None
     
    # Get the Pokemon available in generation 8.
@@ -219,11 +219,11 @@ if __name__ == '__main__':
     with open('../data/data_pokedex.txt', encoding='utf-8') as json_file:
         pokedex = json.load(json_file)    
         pkmn_name_hashmaps = get_pokemon_to_name_hashmaps(pokedex)
-        name_to_display_map = pkmn_name_hashmaps[0]
+        pkmn_name_to_display_map = pkmn_name_hashmaps[0]
         
-        display_to_name_map = pkmn_name_hashmaps[1]
+        display_to_pkmn_name_map = pkmn_name_hashmaps[1]
         write_to_json('../data/names/data_display_to_names.json', 
-                      display_to_name_map)     
+                      display_to_pkmn_name_map)     
         
     with open('../data/data_moves.txt', encoding='utf-8') as json_file:
         moves = json.load(json_file)    
@@ -234,7 +234,7 @@ if __name__ == '__main__':
     with open('../data/data_learnsets.txt') as json_file:
         learnsets = json.load(json_file)
         moves_hashmaps = get_moves_hashmaps(learnsets, \
-                                            name_to_display_map, \
+                                            pkmn_name_to_display_map, \
                                             moves_to_display_map)
         
         write_to_json('../data/moves/data_pokemon_to_moves.json', 
@@ -246,7 +246,7 @@ if __name__ == '__main__':
     with open('../data/data_pokedex.txt', encoding='utf-8') as json_file:
         pokedex = json.load(json_file)
         abilities_hashmaps = get_abilities_hashmaps(pokedex, \
-                                                    name_to_display_map, \
+                                                    pkmn_name_to_display_map, \
                                                     legal_pokemon_set)
     
         write_to_json('../data/abilities/data_pokemon_to_abilities.json', 
@@ -255,7 +255,7 @@ if __name__ == '__main__':
                       abilities_hashmaps[1])
         
         types_hashmaps = get_types_hashmaps(pokedex, \
-                                    name_to_display_map, \
+                                    pkmn_name_to_display_map, \
                                     legal_pokemon_set)        
 
         write_to_json('../data/types/data_pokemon_to_types.json', 
