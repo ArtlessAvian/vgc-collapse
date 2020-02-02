@@ -68,8 +68,8 @@ var PokemonSuperposition = (function () {
     }
     PokemonSuperposition.prototype.collapse = function (observation, recursion_depth) {
         if (recursion_depth === void 0) { recursion_depth = 0; }
-        if (recursion_depth > 10) {
-            console.log("RECURSION DEPTH EXCEEDED. Results might be wrong!");
+        if (recursion_depth > 20) {
+            console.log("RECURSION DEPTH EXCEEDED. Infinite loop? Results might be wrong!");
         }
         if (observation == 0) {
             var possible_abilities_1 = [];
@@ -144,8 +144,7 @@ var Collapser = (function () {
             this.history = this.history.slice(0, this.stepNumber);
             this.history.push(new TeamSuperposition(this.pos));
         }
-        else {
-            console.log("Done or contradiction");
+        else if (observation == -2) {
             this.backstep();
             this.step();
         }
@@ -160,7 +159,6 @@ var Collapser = (function () {
         return 0;
     };
     Collapser.prototype.set = function (index, value) {
-        console.log(index, value);
         clearArray(this.pos.matrix[index]).push(value);
         this.pos.collapse(index);
         this.stepNumber++;

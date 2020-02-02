@@ -21,7 +21,6 @@ Promise.all(Model.promises)
         });
     });
     updateEverything();
-    console.log("Main Ready!");
 });
 function updateCard(cardNum) {
     Dropdown.createPokemonNameDropdown(main.pos.matrix[0 + cardNum * PokemonSuperposition.pokemonSize], cardNum);
