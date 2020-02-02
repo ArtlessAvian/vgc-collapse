@@ -111,4 +111,14 @@ button {
     border-radius: 50%;
     border: 0;
     margin: 5px;
+
+    outline: none;
+    cursor: pointer;
+}
+
+button:active {
+    background-color: rgba(105, 253, 246, 0.7);
+    -webkit-box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
+       -moz-box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
+            box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
 }
