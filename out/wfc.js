@@ -18,7 +18,6 @@ var TeamSuperposition = (function () {
         this.matrix = [];
         for (var i = 0; i < 6; i++) {
             this.matrix = this.matrix.concat(this.members[i].matrix);
-            console.log(this.matrix);
         }
     };
     TeamSuperposition.prototype.collapse = function (observation) {
@@ -121,29 +120,21 @@ var Collapser = (function () {
         else {
             console.log("Done or contradiction");
         }
-        console.log(this.pos.matrix.map(function (vec) { return vec.join(", "); }).join("\n"));
-        console.log(this);
         return observation;
     };
     Collapser.prototype.backstep = function () {
         if (this.stepNumber == 0) {
-            return;
+            return -1;
         }
         this.stepNumber--;
         this.pos = new TeamSuperposition(this.history[this.stepNumber]);
-        console.log(this.pos.matrix.map(function (vec) { return vec.join(", "); }).join("\n"));
-        console.log(this);
+        return 0;
     };
     Collapser.prototype.set = function (index, value) {
-        console.log(index, value);
         clearArray(this.pos.matrix[index]).push(value);
         this.pos.collapse(index);
         this.stepNumber++;
         this.history.push(new TeamSuperposition(this.pos));
-    };
-    Collapser.prototype.fiveStep = function () {
-        for (var i = 0; i < 5 && this.step() >= 0; i++)
-            ;
     };
     Collapser.prototype.observe = function () {
         if (this.pos.matrix.some(function (thingy) { return thingy.length == 0; })) {

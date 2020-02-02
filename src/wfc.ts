@@ -41,7 +41,7 @@ class TeamSuperposition
         for (let i = 0; i < 6; i++)
         {
             this.matrix = this.matrix.concat(this.members[i].matrix);
-            console.log(this.matrix)
+            // console.log(this.matrix)
         }
     }
 
@@ -185,33 +185,29 @@ class Collapser
         }
 
         // console.log(this.matrix.map(vec => vec.length == 1 ? vec[0] : "").join("\n"));
-        console.log(this.pos.matrix.map(vec => vec.join(", ")).join("\n"));
-        console.log(this);
+        // console.log(this.pos.matrix.map(vec => vec.join(", ")).join("\n"));
+        // console.log(this);
         
         return observation;
     }
 
     public backstep()
     {
-        if (this.stepNumber == 0) {return;}
+        if (this.stepNumber == 0) {return -1;}
         this.stepNumber--;
         this.pos = new TeamSuperposition(this.history[this.stepNumber]);
-        console.log(this.pos.matrix.map(vec => vec.join(", ")).join("\n"));
-        console.log(this);
+        // console.log(this.pos.matrix.map(vec => vec.join(", ")).join("\n"));
+        // console.log(this);
+        return 0;
     }
 
     public set(index : number, value : string)
     {
-        console.log(index, value);
+        // console.log(index, value);
         clearArray(this.pos.matrix[index]).push(value);
         this.pos.collapse(index);
         this.stepNumber++;
         this.history.push(new TeamSuperposition(this.pos));
-    }
-
-    public fiveStep()
-    {
-        for (let i = 0; i < 5 && this.step() >= 0; i++);
     }
     
     // returns -2 on contradiciton

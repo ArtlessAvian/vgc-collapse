@@ -7,51 +7,40 @@ Promise.all(Model.promises)
     $('document').ready(function() { 
         console.log("Dom Ready!")
         
-        $("#back-1").click(function()
-        {
-            main.backstep()
-        });
+        $("#back-5").click(function() {for (let i = 0; i < 5 && main.backstep() >= 0; i++); updateEverything();});
+        $("#back-1").click(function() {main.backstep(); updateEverything();});
         $("#forward-1").click(function() {main.step(); updateEverything();});
-        $("#forward-5").click(function() {main.fiveStep(); updateEverything();});
+        $("#forward-5").click(function() {for (let i = 0; i < 5 && main.step() >= 0; i++); updateEverything();});
         // $("select/").select(function(event) {})
         $("select").on("select2:selecting", function(event) {
             // console.log(event, this);
             let text = event.params.args.data.text;
             let idLen = (this.id).length;
-            if (idLen > 15)
-            {
-                let cardNum = parseInt((this.id).charAt(idLen-3));
-                let attNum = parseInt((this.id).charAt(idLen-1));
-                main.set(cardNum * 6 - 6 + attNum + 1, text);
-            } else
-            {
-                let cardNum = parseInt((this.id).charAt(idLen-1));
-                main.set(cardNum * 6 - 6, text);
-            }
+            let cardNum = parseInt((this.id).charAt(idLen-3));
+            let offset = parseInt((this.id).charAt(idLen-1));
+            main.set(cardNum * 6 + offset, text);
+            updateEverything();
         }); //main.update
     });
 
-    // console.log(main.pos.matrix)
-    function updateEverything()
-    {
-        for (let i = 1; i <= 6; i++)
-        {
-            this.updateCard(i)
-        }
-    }
-
-    function updateCard(cardNum : number, matrix : string[][]) {
-        console.log(cardNum);
-        console.log(matrix);
-
-        // 0 is pokemon name
-        // 1 is ability
-        // [2-5] are moves (2, 3, 4, 5)
-        // matrix[]
-    }
-
-    Dropdown.createPokemonNameDropdown(main.pos.matrix[0]);
-    Dropdown.createPokemonMoveDropdown(main.pos.matrix[5]);
+    updateEverything();
 
     console.log("Main Ready!");
 })
+
+function updateCard(cardNum : number) {
+    Dropdown.createPokemonNameDropdown(main.pos.matrix[0 + cardNum * 6], cardNum);
+    Dropdown.createPokemonAbilityDropdown(main.pos.matrix[1 + cardNum * 6], cardNum);    
+    Dropdown.createPokemonMoveDropdown(main.pos.matrix[2 + cardNum * 6], cardNum, 2);    
+    Dropdown.createPokemonMoveDropdown(main.pos.matrix[3 + cardNum * 6], cardNum, 3);    
+    Dropdown.createPokemonMoveDropdown(main.pos.matrix[4 + cardNum * 6], cardNum, 4);    
+    Dropdown.createPokemonMoveDropdown(main.pos.matrix[5 + cardNum * 6], cardNum, 5);    
+}
+
+function updateEverything()
+{
+    for (let i = 0; i <= 5; i++)
+    {
+        updateCard(i)
+    }
+}
