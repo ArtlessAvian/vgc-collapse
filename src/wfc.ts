@@ -42,6 +42,17 @@ class PokemonSuperposition
 
         if (observation == 0)
         {
+            let possible_abilities = [];
+            this.matrix[0].forEach(element => {
+                possible_abilities = possible_abilities.concat(Model.pokemon_to_abilities[element]);
+            });
+            let intersection = intersect(this.matrix[1], possible_abilities);
+            if (!arrayEqual(this.matrix[1], intersection))
+            {
+                this.matrix[1] = intersection;
+                this.collapse(1, recursion_depth + 1);
+            }
+
             let possible_moves = [];
             this.matrix[0].forEach(element => {
                 possible_moves = possible_moves.concat(Model.pokemon_to_moves[element]);
@@ -60,15 +71,15 @@ class PokemonSuperposition
         }
         else if (observation == 1)
         {
-            let possible_abilities = [];
-            this.matrix[0].forEach(element => {
-                possible_abilities = possible_abilities.concat(Model.pokemon_to_moves[element]);
+            let possible_pokemon = [];
+            this.matrix[1].forEach(element => {
+                possible_pokemon = possible_pokemon.concat(Model.abilities_to_pokemon[element]);
             });
-            let intersection = intersect(this.matrix[i], possible_moves);
-            if (!arrayEqual(this.matrix[i], intersection))
+            let intersection = intersect(this.matrix[0], possible_pokemon);
+            if (!arrayEqual(this.matrix[0], intersection))
             {
-                this.matrix[i] = intersection;
-                this.collapse(i, recursion_depth + 1);
+                this.matrix[0] = intersection;
+                this.collapse(0, recursion_depth + 1);
             }
         }
         else if (observation >= 2 && observation <= 5)
@@ -84,7 +95,7 @@ class PokemonSuperposition
                 this.collapse(0, recursion_depth + 1);
             }
 
-            for (let i = 1; i <= 4; i++)
+            for (let i = 2; i <= 5; i++)
             {
                 let index = this.matrix[i].indexOf(this.matrix[observation][0]);
                 if (i != observation && index != -1)

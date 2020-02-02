@@ -24,40 +24,49 @@ var PokemonSuperposition = (function () {
             console.log("RECURSION DEPTH EXCEEDED. Results might be wrong!");
         }
         if (observation == 0) {
+            var possible_abilities_1 = [];
+            this.matrix[0].forEach(function (element) {
+                possible_abilities_1 = possible_abilities_1.concat(Model.pokemon_to_abilities[element]);
+            });
+            var intersection = intersect(this.matrix[1], possible_abilities_1);
+            if (!arrayEqual(this.matrix[1], intersection)) {
+                this.matrix[1] = intersection;
+                this.collapse(1, recursion_depth + 1);
+            }
             var possible_moves_1 = [];
             this.matrix[0].forEach(function (element) {
                 possible_moves_1 = possible_moves_1.concat(Model.pokemon_to_moves[element]);
             });
             for (var i = 2; i <= 5; i++) {
-                var intersection = intersect(this.matrix[i], possible_moves_1);
-                if (!arrayEqual(this.matrix[i], intersection)) {
-                    this.matrix[i] = intersection;
+                var intersection_1 = intersect(this.matrix[i], possible_moves_1);
+                if (!arrayEqual(this.matrix[i], intersection_1)) {
+                    this.matrix[i] = intersection_1;
                     this.collapse(i, recursion_depth + 1);
                 }
             }
         }
         else if (observation == 1) {
-            var possible_abilities_1 = [];
-            this.matrix[0].forEach(function (element) {
-                possible_abilities_1 = possible_abilities_1.concat(Model.pokemon_to_moves[element]);
-            });
-            var intersection = intersect(this.matrix[i], possible_moves);
-            if (!arrayEqual(this.matrix[i], intersection)) {
-                this.matrix[i] = intersection;
-                this.collapse(i, recursion_depth + 1);
-            }
-        }
-        else if (observation >= 2 && observation <= 5) {
             var possible_pokemon_1 = [];
-            this.matrix[observation].forEach(function (element) {
-                possible_pokemon_1 = possible_pokemon_1.concat(Model.moves_to_pokemon[element]);
+            this.matrix[1].forEach(function (element) {
+                possible_pokemon_1 = possible_pokemon_1.concat(Model.abilities_to_pokemon[element]);
             });
             var intersection = intersect(this.matrix[0], possible_pokemon_1);
             if (!arrayEqual(this.matrix[0], intersection)) {
                 this.matrix[0] = intersection;
                 this.collapse(0, recursion_depth + 1);
             }
-            for (var i = 1; i <= 4; i++) {
+        }
+        else if (observation >= 2 && observation <= 5) {
+            var possible_pokemon_2 = [];
+            this.matrix[observation].forEach(function (element) {
+                possible_pokemon_2 = possible_pokemon_2.concat(Model.moves_to_pokemon[element]);
+            });
+            var intersection = intersect(this.matrix[0], possible_pokemon_2);
+            if (!arrayEqual(this.matrix[0], intersection)) {
+                this.matrix[0] = intersection;
+                this.collapse(0, recursion_depth + 1);
+            }
+            for (var i = 2; i <= 5; i++) {
                 var index = this.matrix[i].indexOf(this.matrix[observation][0]);
                 if (i != observation && index != -1) {
                     this.matrix[i].splice(this.matrix[i].indexOf(this.matrix[observation][0]), 1);
