@@ -280,14 +280,16 @@ button {
 
     outline: none;
     cursor: pointer;
+
+    box-shadow: 1px 1px 5px rgba(117, 117, 117, 0.4);
 }
 
 button:hover {
-    background-color: rgba(152, 255, 250, 0.6);
+    background-color: rgba(145, 255, 249, 0.6);
 }
 
 button:active {
-    background-color: rgba(105, 253, 246, 0.7);
+    background-color: rgba(101, 255, 247, 0.7);
     -webkit-box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
        -moz-box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
             box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
