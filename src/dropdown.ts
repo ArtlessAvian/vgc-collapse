@@ -57,4 +57,22 @@ namespace Dropdown
         }
         dropdown.innerHTML = txt;        
     }
+
+    export function createPokemonItemDropdown<T>(items : Array<T>, i : number)
+    {
+        let dropdown = document.getElementById("dropdown-" + i + "-6");
+        let txt : string;
+        if (items.length === 1) {
+            txt = "<option value='" + items[0] + "' disabled selected hidden>" + items[0] + "</option>";
+        } else
+        {
+            txt = "<option value='' disabled selected hidden>-----</option>";
+            let i : T;
+            for (i of items)
+            {
+                txt += "<option>" + i + "</option>";
+            }    
+        }
+        dropdown.innerHTML = txt;        
+    }
 }

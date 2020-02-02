@@ -51,4 +51,21 @@ var Dropdown;
         dropdown.innerHTML = txt;
     }
     Dropdown.createPokemonMoveDropdown = createPokemonMoveDropdown;
+    function createPokemonItemDropdown(items, i) {
+        var dropdown = document.getElementById("dropdown-" + i + "-6");
+        var txt;
+        if (items.length === 1) {
+            txt = "<option value='" + items[0] + "' disabled selected hidden>" + items[0] + "</option>";
+        }
+        else {
+            txt = "<option value='' disabled selected hidden>-----</option>";
+            var i_1;
+            for (var _i = 0, items_1 = items; _i < items_1.length; _i++) {
+                i_1 = items_1[_i];
+                txt += "<option>" + i_1 + "</option>";
+            }
+        }
+        dropdown.innerHTML = txt;
+    }
+    Dropdown.createPokemonItemDropdown = createPokemonItemDropdown;
 })(Dropdown || (Dropdown = {}));
