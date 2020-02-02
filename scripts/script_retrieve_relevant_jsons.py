@@ -213,7 +213,7 @@ def get_pokemon_to_sprite_url_hashmap(pkmn_display_names: dict, \
     pkmn_to_sprite_url_map = {}
     url_base = "https://play.pokemonshowdown.com/sprites/gen5/"
     for pokemon_name in legal_pokemon:
-        pkmn_display_name = pkmn_display_names[pokemon_name]
+        pkmn_display_name = pkmn_display_names[pokemon_name].replace("'", "")
         url_suffix = '-'.join(pkmn_display_name.lower().split(' ')) + ".png"
         pkmn_to_sprite_url_map[pkmn_display_name] = url_base + url_suffix
     return pkmn_to_sprite_url_map
