@@ -24,6 +24,12 @@ var Model;
         Model.moves_to_pokemon = json;
         Model.moves_sorted = Object.keys(json).sort();
     }));
+    Model.promises.push(fetch("./data/items/data_items.json")
+        .then(function (response) { return response.json(); })
+        .then(function (json) {
+        Model.items_sorted = json["items"]
+            .sort();
+    }));
     Model.promises.push(fetch("./data/names/data_display_to_names.json")
         .then(function (response) { return response.json(); })
         .then(function (json) {

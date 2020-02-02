@@ -3,6 +3,7 @@ namespace Model
     export var pokemon_sorted : string[];
     export var moves_sorted : string[];
     export var abilities_sorted : string[];
+    export var items_sorted : string[];
 
     export var names_sorted : string[];
 
@@ -37,6 +38,14 @@ namespace Model
             moves_to_pokemon = json; moves_sorted = Object.keys(json).sort();
         }));
 
+    promises.push(fetch("./data/items/data_items.json")
+        .then(response => response.json())
+        .then(function(json) {
+            items_sorted = json["items"]
+                // .filter(item => !item.endsWith("Ball")) // why not lmao
+                .sort();
+        }));
+    
     promises.push(fetch("./data/names/data_display_to_names.json")
         .then(response => response.json())
         .then(function(json) {

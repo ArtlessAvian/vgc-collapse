@@ -21,7 +21,9 @@ var TeamSuperposition = (function () {
         }
     };
     TeamSuperposition.prototype.collapse = function (observation) {
-        this.members[Math.floor(observation / 6)].collapse(observation % 6);
+        console.log(Math.floor(observation / PokemonSuperposition.pokemonSize), observation % PokemonSuperposition.pokemonSize);
+        ;
+        this.members[Math.floor(observation / PokemonSuperposition.pokemonSize)].collapse(observation % PokemonSuperposition.pokemonSize);
     };
     return TeamSuperposition;
 }());
@@ -35,14 +37,12 @@ var PokemonSuperposition = (function () {
             this.matrix.push(Model.moves_sorted.slice());
             this.matrix.push(Model.moves_sorted.slice());
             this.matrix.push(Model.moves_sorted.slice());
+            this.matrix.push(Model.items_sorted.slice());
         }
         else {
-            this.matrix.push(copy.matrix[0].slice());
-            this.matrix.push(copy.matrix[1].slice());
-            this.matrix.push(copy.matrix[2].slice());
-            this.matrix.push(copy.matrix[3].slice());
-            this.matrix.push(copy.matrix[4].slice());
-            this.matrix.push(copy.matrix[5].slice());
+            for (var i = 0; i < PokemonSuperposition.pokemonSize; i++) {
+                this.matrix.push(copy.matrix[i].slice());
+            }
         }
     }
     PokemonSuperposition.prototype.collapse = function (observation, recursion_depth) {
@@ -84,6 +84,12 @@ var PokemonSuperposition = (function () {
             }
         }
         else if (observation >= 2 && observation <= 5) {
+            for (var i = 2; i <= 5; i++) {
+                var index = this.matrix[i].indexOf(this.matrix[observation][0]);
+                if (i != observation && index != -1) {
+                    this.matrix[i].splice(this.matrix[i].indexOf(this.matrix[observation][0]), 1);
+                }
+            }
             var possible_pokemon_2 = [];
             this.matrix[observation].forEach(function (element) {
                 possible_pokemon_2 = possible_pokemon_2.concat(Model.moves_to_pokemon[element]);
@@ -93,14 +99,9 @@ var PokemonSuperposition = (function () {
                 fillArray(this.matrix[0], intersection);
                 this.collapse(0, recursion_depth + 1);
             }
-            for (var i = 2; i <= 5; i++) {
-                var index = this.matrix[i].indexOf(this.matrix[observation][0]);
-                if (i != observation && index != -1) {
-                    this.matrix[i].splice(this.matrix[i].indexOf(this.matrix[observation][0]), 1);
-                }
-            }
         }
     };
+    PokemonSuperposition.pokemonSize = 7;
     return PokemonSuperposition;
 }());
 var Collapser = (function () {
@@ -131,6 +132,7 @@ var Collapser = (function () {
         return 0;
     };
     Collapser.prototype.set = function (index, value) {
+        console.log(index, value);
         clearArray(this.pos.matrix[index]).push(value);
         this.pos.collapse(index);
         this.stepNumber++;
