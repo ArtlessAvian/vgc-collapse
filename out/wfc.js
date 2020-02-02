@@ -146,6 +146,8 @@ var Collapser = (function () {
         }
         else {
             console.log("Done or contradiction");
+            this.backstep();
+            this.step();
         }
         return observation;
     };

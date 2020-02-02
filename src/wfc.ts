@@ -230,6 +230,8 @@ class Collapser
         else
         {
             console.log("Done or contradiction");
+            this.backstep();
+            this.step();
         }
 
         // console.log(this.matrix.map(vec => vec.length == 1 ? vec[0] : "").join("\n"));
