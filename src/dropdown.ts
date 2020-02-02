@@ -3,15 +3,16 @@ namespace Dropdown
     export function createPokemonNameDropdown(pokemon : Array<string>, i : number)
     {
         let dropdown = document.getElementById("dropdown-" + i + "-0");
+        let image = document.getElementById("img-" + i);
         let txt : string;
-
+        
         if (pokemon.length === 1) {
-            let image = document.getElementById("img-" + i);
             txt = "<option value='" + pokemon[0] + "' disabled selected hidden>" + pokemon[0] + "</option>";
             $(image).attr("src", Model.pokemon_to_image[pokemon[0]]);
-
+            
         } else
         {
+            $(image).attr("src", "whosthat.png");
             txt = "<option value='' disabled selected hidden>-----</option>";
             let p : string;
             for (p of pokemon)
