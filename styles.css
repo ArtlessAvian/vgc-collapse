@@ -37,7 +37,7 @@ header {
 
 .pokemon-team-container {
     /* background-color: rgb(255, 0, 0); */
-    margin: 0;
+
     grid-area: pokemon;
     height: calc(100% - 30px);
     width: calc(100% - 30px);
@@ -47,7 +47,7 @@ header {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(3, 1fr);
     grid-column-gap: 10px;
-    grid-row-gap: 10px;
+    grid-row-gap: 15px;
 
     border-radius: 20px;
     /* box-shadow: 2px 2px 15px rgba(80, 80, 80, 0.5); */
@@ -64,8 +64,7 @@ header {
     background-color: rgba(255, 0, 0, 0.5);
     float: left;
     width: calc(60% - 20px);
-    /* height: calc(100% - 20px); */
-    height: 154px;
+    height: calc(100% - 20px);
     padding: 10px;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
@@ -160,14 +159,11 @@ td span.select2-container--default .select2-selection--single .select2-selection
          box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
 }
 
-.type-container {
-    grid-area: type;
-}
-
 .type {
+    grid-area: type;
+
     margin: 0;
-    height: 20px;
-    margin-top: 15px;
+    margin-top: 10px;
     margin-right: 5px;
     padding: 0;
     font-size: 16px;
@@ -182,18 +178,9 @@ td span.select2-container--default .select2-selection--single .select2-selection
         1px 1px 0 #000;
 }
 
-/* .type:nth-child(1) {
-    margin-top: 10px;
-    margin-bottom: 20px;
-} */
-
 .type.Normal {
     background-color: #a8a878;
 }
-
-/* .type.empty {
-    background-color: red;
-} */
 
 .type.Fighting {
     background-color: #c03028;
@@ -294,16 +281,14 @@ button {
 
     outline: none;
     cursor: pointer;
-
-    box-shadow: 1px 1px 5px rgba(121, 121, 121, 0.479);
 }
 
 button:hover {
-    background-color: rgba(138, 255, 249, 0.6);
+    background-color: rgba(152, 255, 250, 0.6);
 }
 
 button:active {
-    background-color: rgba(93, 255, 247, 0.7);
+    background-color: rgba(105, 253, 246, 0.7);
     -webkit-box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
        -moz-box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
             box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
@@ -312,10 +297,6 @@ button:active {
 /* 980px */
 @media only screen and (max-width: 980px) {
     .pokemon-team-container {
-        /* width: calc(60% - 20px);
-        height: calc(100% - 20px);
-        padding: 10px; */
-    
         grid-template-columns: repeat(1, 1fr);
         grid-template-rows: repeat(6, 1fr);
         grid-column-gap: 0;
