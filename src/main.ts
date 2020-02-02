@@ -14,9 +14,10 @@ Promise.all(Model.promises)
         $("select").on("select2:selecting", function(event) {
             // console.log(event, this);
             let pokemon = event.params.args.data.text;
-            let cardNum = (this.id).charAt((this.id).length-1);
+            let cardNum = parseInt((this.id).charAt((this.id).length-1));
             // console.log(pokemon);
             // console.log(cardNum);
+            main.set(cardNum * 6 - 6, pokemon);
         }); //main.update
     });
 

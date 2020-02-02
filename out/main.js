@@ -9,7 +9,8 @@ Promise.all(Model.promises)
         $("#forward-5").click(function () { main.fiveStep(); });
         $("select").on("select2:selecting", function (event) {
             var pokemon = event.params.args.data.text;
-            var cardNum = (this.id).charAt((this.id).length - 1);
+            var cardNum = parseInt((this.id).charAt((this.id).length - 1));
+            main.set(cardNum * 6 - 6, pokemon);
         });
     });
     Dropdown.createPokemonNameDropdown(main.pos.matrix[0]);

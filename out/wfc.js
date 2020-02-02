@@ -116,7 +116,7 @@ var Collapser = (function () {
             this.pos.collapse(observation);
             this.stepNumber++;
             this.history = this.history.slice(0, this.stepNumber);
-            this.history.push(new PokemonSuperposition(this.pos));
+            this.history.push(new TeamSuperposition(this.pos));
         }
         else {
             console.log("Done or contradiction");
@@ -130,14 +130,16 @@ var Collapser = (function () {
             return;
         }
         this.stepNumber--;
-        this.pos = new PokemonSuperposition(this.history[this.stepNumber]);
+        this.pos = new TeamSuperposition(this.history[this.stepNumber]);
         console.log(this.pos.matrix.map(function (vec) { return vec.join(", "); }).join("\n"));
         console.log(this);
     };
     Collapser.prototype.set = function (index, value) {
-        this.pos.matrix[index] = [value];
+        console.log(index, value);
+        clearArray(this.pos.matrix[index]).push(value);
+        this.pos.collapse(index);
         this.stepNumber++;
-        this.history = [new PokemonSuperposition(this.pos)];
+        this.history.push(new TeamSuperposition(this.pos));
     };
     Collapser.prototype.fiveStep = function () {
         for (var i = 0; i < 5 && this.step() >= 0; i++)

@@ -159,8 +159,8 @@ class PokemonSuperposition
 
 class Collapser
 {
-    pos : Superposition;
-    history : Array<Superposition>;
+    pos : TeamSuperposition;
+    history : Array<TeamSuperposition>;
     stepNumber : number = 0;
 
     constructor()
@@ -177,7 +177,7 @@ class Collapser
             this.pos.collapse(observation);
             this.stepNumber++;
             this.history = this.history.slice(0, this.stepNumber);
-            this.history.push(new PokemonSuperposition(this.pos));
+            this.history.push(new TeamSuperposition(this.pos));
         }
         else
         {
@@ -195,16 +195,18 @@ class Collapser
     {
         if (this.stepNumber == 0) {return;}
         this.stepNumber--;
-        this.pos = new PokemonSuperposition(this.history[this.stepNumber]);
+        this.pos = new TeamSuperposition(this.history[this.stepNumber]);
         console.log(this.pos.matrix.map(vec => vec.join(", ")).join("\n"));
         console.log(this);
     }
 
     public set(index : number, value : string)
     {
-        this.pos.matrix[index] = [value];
+        console.log(index, value);
+        clearArray(this.pos.matrix[index]).push(value);
+        this.pos.collapse(index);
         this.stepNumber++;
-        this.history = [new PokemonSuperposition(this.pos)];
+        this.history.push(new TeamSuperposition(this.pos));
     }
 
     public fiveStep()
