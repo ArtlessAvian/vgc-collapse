@@ -154,6 +154,7 @@ if __name__ == '__main__':
         dummy_var = {}
         dummy_var["pokemon_list"] = pokemon_list
         
+        # Get the Pokemon available in generation 8.
         write_to_json('../data/names/data_legal_pokemon.json', 
                       dummy_var)
                       

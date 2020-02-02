@@ -15,19 +15,19 @@ fs.writeFile("../data/data_learnsets.txt", LearnsetsJson, function(err) {
     if(err) {
         return console.log(err);
     }
-    console.log("The file was saved!");
+    console.log("'Learnsets' was saved!");
 });
 
 fs.writeFile("../data/data_pokedex.txt", PokedexJson, function(err) {
     if(err) {
         return console.log(err);
     }
-    console.log("The file was saved!");
+    console.log("'Pokedex' was saved!");
 });
 
 fs.writeFile("../data/data_formats.txt", FormatsDataJson, function(err) {
     if(err) {
         return console.log(err);
     }
-    console.log("The file was saved!");
+    console.log("'Formats' was saved!");
 });
