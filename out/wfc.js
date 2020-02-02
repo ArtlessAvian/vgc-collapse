@@ -18,23 +18,35 @@ var PokemonSuperposition = (function () {
     }
     PokemonSuperposition.prototype.collapse = function (observation) {
         console.log(this.matrix.map(function (vec) { return vec.join(", "); }).join("\n\n"));
+        console.log(observation + "was observed");
         if (observation == 0) {
             var possible_moves_1 = [];
             this.matrix[0].forEach(function (element) {
-                possible_moves_1.splice(possible_moves_1.length, 0, Model.pokemon_to_moves[element]);
+                possible_moves_1 = possible_moves_1.concat(Model.pokemon_to_moves[element]);
             });
             for (var i = 1; i <= 4; i++) {
-                if (intersect(this.matrix[i], possible_moves_1)) {
+                var intersection = intersect(this.matrix[i], possible_moves_1);
+                if (this.matrix[i] != intersection) {
+                    this.matrix[i] = intersection;
+                    console.log("no change");
                 }
             }
         }
         if (observation >= 1 && observation <= 4) {
             var possible_pokemon_1 = [];
             this.matrix[observation].forEach(function (element) {
-                possible_pokemon_1.splice(possible_pokemon_1.length, 0, Model.moves_to_pokemon[element]);
+                possible_pokemon_1 = possible_pokemon_1.concat(Model.moves_to_pokemon[element]);
             });
-            intersect(this.matrix[0], possible_pokemon_1);
-            {
+            var intersection = intersect(this.matrix[0], possible_pokemon_1);
+            if (this.matrix[0] != intersection) {
+                this.matrix[0] = intersection;
+                this.collapse(0);
+            }
+            for (var i = 1; i <= 4; i++) {
+                var index = this.matrix[i].indexOf(this.matrix[observation][0]);
+                if (i != observation && index != -1) {
+                    this.matrix[i].splice(this.matrix[i].indexOf(this.matrix[observation][0]), 1);
+                }
             }
         }
     };
@@ -91,21 +103,20 @@ function randomElement(arr) {
     return arr[randomInt(0, arr.length - 1)];
 }
 function intersect(a, b) {
+    var out = [];
     a = a.sort();
     b = b.sort();
-    var out = false;
     var ai = 0;
     var bi = 0;
     while (ai < a.length && bi < b.length) {
         if (a[ai] < b[bi]) {
-            console.log(a[ai]);
-            a.splice(ai, 1);
-            out = true;
+            ai++;
         }
         else if (a[ai] > b[bi]) {
             bi++;
         }
         else {
+            out.push(a[ai]);
             ai++;
             bi++;
         }
