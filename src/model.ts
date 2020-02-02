@@ -11,7 +11,12 @@ namespace Model
     export var abilities_to_pokemon : Object;
     export var pokemon_to_moves : Object;
     export var moves_to_pokemon : Object;
+    export var pokemon_to_items : Object;
+    export var items_to_pokemon : Object;
 
+    export var pokemon_to_image : Object;
+    export var items_to_image : Object;
+    
     export var display_to_names : Object;
 
     export var promises : Array<Promise<void>> = [];
@@ -38,17 +43,33 @@ namespace Model
             moves_to_pokemon = json; moves_sorted = Object.keys(json).sort();
         }));
 
-    promises.push(fetch("./data/items/data_items.json")
+    promises.push(fetch("./data/items/data_pokemon_to_items.json")
         .then(response => response.json())
         .then(function(json) {
-            items_sorted = json["items"]
-                // .filter(item => !item.endsWith("Ball")) // why not lmao
-                .sort();
+            pokemon_to_items = json;
+        }));
+    
+    promises.push(fetch("./data/items/data_items_to_pokemon.json")
+        .then(response => response.json())
+        .then(function(json) {
+            items_to_pokemon = json; items_sorted = Object.keys(json).sort();
         }));
     
     promises.push(fetch("./data/names/data_display_to_names.json")
         .then(response => response.json())
         .then(function(json) {
-            display_to_names = json; names_sorted = Object.keys(json).sort();
+            display_to_names = json;
+        }));
+    
+    promises.push(fetch("./data/sprite_url/data_item_names_to_sprite_url.json")
+        .then(response => response.json())
+        .then(function(json) {
+            items_to_image = json;
+        }));
+
+    promises.push(fetch("./data/sprite_url/data_pkmn_names_to_sprite_url.json")
+        .then(response => response.json())
+        .then(function(json) {
+            pokemon_to_image = json;
         }));
 }

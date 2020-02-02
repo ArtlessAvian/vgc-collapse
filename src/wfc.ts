@@ -47,7 +47,39 @@ class TeamSuperposition
 
     public collapse(observation : number)
     {
-        console.log(Math.floor(observation/PokemonSuperposition.pokemonSize), observation % PokemonSuperposition.pokemonSize));
+        console.log(this.matrix[observation]);
+        if (this.matrix[observation].length == 1)
+        {
+            // species clause
+            if (observation % PokemonSuperposition.pokemonSize == 0)
+            {
+                for (let i = 0; i < PokemonSuperposition.pokemonSize * 6; i += PokemonSuperposition.pokemonSize)
+                {
+                    let index = this.matrix[i].indexOf(this.matrix[observation][0]);
+                    if (i != observation && index != -1)
+                    {
+                        console.log("removed " + this.matrix[observation][0])
+                        this.matrix[i].splice(this.matrix[i].indexOf(this.matrix[observation][0]), 1);
+                        this.collapse(i);
+                    }
+                }
+            }
+            // item clause
+            if (observation % PokemonSuperposition.pokemonSize == 6)
+            {
+                for (let i = 6; i < PokemonSuperposition.pokemonSize * 6; i += PokemonSuperposition.pokemonSize)
+                {
+                    let index = this.matrix[i].indexOf(this.matrix[observation][0]);
+                    if (i != observation && index != -1)
+                    {
+                        this.matrix[i].splice(this.matrix[i].indexOf(this.matrix[observation][0]), 1);
+                        this.collapse(i);
+                    }
+                }
+            }
+        }
+
+        console.log(Math.floor(observation/PokemonSuperposition.pokemonSize), observation % PokemonSuperposition.pokemonSize);
         this.members[Math.floor(observation/PokemonSuperposition.pokemonSize)].collapse(observation % PokemonSuperposition.pokemonSize);
         // this.buildMatrix();
     }
@@ -135,13 +167,16 @@ class PokemonSuperposition
         }
         else if (observation >= 2 && observation <= 5)
         {
-            for (let i = 2; i <= 5; i++)
+            if (this.matrix[observation].length == 1)
             {
-                let index = this.matrix[i].indexOf(this.matrix[observation][0]);
-                if (i != observation && index != -1)
+                for (let i = 2; i <= 5; i++)
                 {
-                    this.matrix[i].splice(this.matrix[i].indexOf(this.matrix[observation][0]), 1);
-                    // no need to recur
+                    let index = this.matrix[i].indexOf(this.matrix[observation][0]);
+                    if (i != observation && index != -1)
+                    {
+                        this.matrix[i].splice(this.matrix[i].indexOf(this.matrix[observation][0]), 1);
+                        // no need to recur
+                    }
                 }
             }
 
@@ -230,8 +265,8 @@ class Collapser
     
         // let vector = randomElement(this.pos.state.filter(thingy => thingy.length > 1));
         let choices = this.pos.matrix.filter(vec => vec.length > 1)
-        let smallest = Math.min.apply(Math, choices.map(choice => choice.length));
-        let vector = randomElement(choices.filter(vec => vec.length == smallest))
+        // let smallest = Math.min.apply(Math, choices.map(choice => choice.length));
+        let vector = randomElement(choices); //.filter(vec => vec.length == smallest))
 
         let index = this.pos.matrix.indexOf(vector);
         let element = randomElement(vector);
