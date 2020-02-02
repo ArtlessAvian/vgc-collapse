@@ -26,7 +26,7 @@ Promise.all(Model.promises)
 
     updateEverything();
 
-    console.log("Main Ready!");
+    // console.log("Main Ready!");
 })
 
 function updateCard(cardNum : number) {
