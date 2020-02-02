@@ -7,22 +7,39 @@ Promise.all(Model.promises)
     $('document').ready(function() { 
         console.log("Dom Ready!")
         
-        $("#back-1").click(function() {main.backstep()});
-        $("#forward-1").click(function() {main.step()});
-        $("#forward-5").click(function() {main.fiveStep()});
+        $("#back-1").click(function()
+        {
+            main.backstep()
+        });
+        $("#forward-1").click(function() {main.step(); updateEverything();});
+        $("#forward-5").click(function() {main.fiveStep(); updateEverything();});
         // $("select/").select(function(event) {})
         $("select").on("select2:selecting", function(event) {
             // console.log(event, this);
-            let pokemon = event.params.args.data.text;
-            let cardNum = parseInt((this.id).charAt((this.id).length-1));
-            // console.log(pokemon);
-            // console.log(cardNum);
-            main.set(cardNum * 6 - 6, pokemon);
+            let text = event.params.args.data.text;
+            let idLen = (this.id).length;
+            if (idLen > 15)
+            {
+                let cardNum = parseInt((this.id).charAt(idLen-3));
+                let attNum = parseInt((this.id).charAt(idLen-1));
+                main.set(cardNum * 6 - 6 + attNum + 1, text);
+            } else
+            {
+                let cardNum = parseInt((this.id).charAt(idLen-1));
+                main.set(cardNum * 6 - 6, text);
+            }
         }); //main.update
     });
 
     // console.log(main.pos.matrix)
-    
+    function updateEverything()
+    {
+        for (let i = 1; i <= 6; i++)
+        {
+            this.updateCard(i)
+        }
+    }
+
     function updateCard(cardNum : number, matrix : string[][]) {
         console.log(cardNum);
         console.log(matrix);
