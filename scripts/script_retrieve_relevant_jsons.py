@@ -242,6 +242,21 @@ def get_items(data: dict):
         except:
             items.append(secondary_dict["name"])
     return items
+
+def get_items_to_sprite_url_hashmap(items: list):
+    '''
+    Arguments:    
+        items: List of items available in generation 8 (string).
+        
+    Returns:
+        A dict mapping items (string) to a website to get the items's sprite (string).
+    '''
+    items_to_sprite_url_map = {}
+    url_base = "https://img.pokemondb.net/sprites/items/"
+    for item in items:
+        url_suffix = '-'.join(item.lower().split(' ')) + ".png"
+        items_to_sprite_url_map[item] = url_base + url_suffix
+    return items_to_sprite_url_map
             
 if __name__ == '__main__':
     legal_pokemon_set = set()
@@ -272,13 +287,6 @@ if __name__ == '__main__':
         moves = json.load(json_file)    
         moves_to_display_map = get_moves_to_name_hashmaps(moves)[0]
         
-    # Get sprite urls.
-    pkmn_to_sprite_url_map = \
-            get_pokemon_to_sprite_url_hashmap(pkmn_name_to_display_map, \
-                                              legal_pokemon_set)
-    write_to_json('../data/sprite_url/data_names_to_sprite_url.json', 
-                      pkmn_to_sprite_url_map)
-    
     # Get items.
     with open('../data/data_items.txt', encoding='utf-8') as json_file:
         items_json = json.load(json_file)
@@ -288,6 +296,19 @@ if __name__ == '__main__':
         dummy_var["items"] = items
         
         write_to_json('../data/items/data_items.json', dummy_var)
+        
+    # Get sprite urls.
+    pkmn_to_sprite_url_map = \
+            get_pokemon_to_sprite_url_hashmap(pkmn_name_to_display_map, \
+                                              legal_pokemon_set)
+    write_to_json('../data/sprite_url/data_pkmn_names_to_sprite_url.json', 
+                      pkmn_to_sprite_url_map)
+    
+    items_to_sprite_url_map = get_items_to_sprite_url_hashmap(items)
+    write_to_json('../data/sprite_url/data_item_names_to_sprite_url.json', \
+                  items_to_sprite_url_map)
+    
+
     
     # Get Pokemon-to-moves JSON.        
     with open('../data/data_learnsets.txt') as json_file:
