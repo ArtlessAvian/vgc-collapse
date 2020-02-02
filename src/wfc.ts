@@ -41,19 +41,21 @@ class TeamSuperposition
         for (let i = 0; i < 6; i++)
         {
             this.matrix = this.matrix.concat(this.members[i].matrix);
-            console.log(this.matrix)
+            // console.log(this.matrix)
         }
     }
 
     public collapse(observation : number)
     {
-        this.members[Math.floor(observation/6)].collapse(observation % 6);
+        console.log(Math.floor(observation/PokemonSuperposition.pokemonSize), observation % PokemonSuperposition.pokemonSize));
+        this.members[Math.floor(observation/PokemonSuperposition.pokemonSize)].collapse(observation % PokemonSuperposition.pokemonSize);
         // this.buildMatrix();
     }
 }
 
 class PokemonSuperposition
 {
+    static readonly pokemonSize = 7;
     matrix : string[][];
     constructor(copy? : PokemonSuperposition)
     {
@@ -66,15 +68,14 @@ class PokemonSuperposition
             this.matrix.push(Model.moves_sorted.slice());
             this.matrix.push(Model.moves_sorted.slice());
             this.matrix.push(Model.moves_sorted.slice());
+            this.matrix.push(Model.items_sorted.slice());
         }
         else
         {
-            this.matrix.push(copy.matrix[0].slice());
-            this.matrix.push(copy.matrix[1].slice());
-            this.matrix.push(copy.matrix[2].slice());
-            this.matrix.push(copy.matrix[3].slice());
-            this.matrix.push(copy.matrix[4].slice());
-            this.matrix.push(copy.matrix[5].slice());
+            for (let i = 0; i < PokemonSuperposition.pokemonSize; i++)
+            {
+                this.matrix.push(copy.matrix[i].slice());
+            }
         }
     }
 
@@ -86,7 +87,7 @@ class PokemonSuperposition
         }
 
         // console.log(this.matrix.map(vec => vec.join(", ")).join("\n\n"));
-        // console.log(observation + "was observed");
+        // console.log("before " + observation, this.matrix[2]);
 
         if (observation == 0)
         {
@@ -114,6 +115,7 @@ class PokemonSuperposition
                 {
                     // this.matrix
                     fillArray(this.matrix[i], intersection);
+                    // console.log("after " + observation, this.matrix[2]);
                     this.collapse(i, recursion_depth + 1);
                 }
             }
@@ -133,6 +135,16 @@ class PokemonSuperposition
         }
         else if (observation >= 2 && observation <= 5)
         {
+            for (let i = 2; i <= 5; i++)
+            {
+                let index = this.matrix[i].indexOf(this.matrix[observation][0]);
+                if (i != observation && index != -1)
+                {
+                    this.matrix[i].splice(this.matrix[i].indexOf(this.matrix[observation][0]), 1);
+                    // no need to recur
+                }
+            }
+
             let possible_pokemon = [];
             this.matrix[observation].forEach(element => {
                 possible_pokemon = possible_pokemon.concat(Model.moves_to_pokemon[element]);
@@ -143,24 +155,15 @@ class PokemonSuperposition
                 fillArray(this.matrix[0], intersection);
                 this.collapse(0, recursion_depth + 1);
             }
-
-            for (let i = 2; i <= 5; i++)
-            {
-                let index = this.matrix[i].indexOf(this.matrix[observation][0]);
-                if (i != observation && index != -1)
-                {
-                    this.matrix[i].splice(this.matrix[i].indexOf(this.matrix[observation][0]), 1);
-                    // no need to recur
-                }
-            }
         }
+        // console.log("finshed " + observation, this.matrix[2]);
     }
 }
 
 class Collapser
 {
-    pos : Superposition;
-    history : Array<Superposition>;
+    pos : TeamSuperposition;
+    history : Array<TeamSuperposition>;
     stepNumber : number = 0;
 
     constructor()
@@ -177,7 +180,7 @@ class Collapser
             this.pos.collapse(observation);
             this.stepNumber++;
             this.history = this.history.slice(0, this.stepNumber);
-            this.history.push(new PokemonSuperposition(this.pos));
+            this.history.push(new TeamSuperposition(this.pos));
         }
         else
         {
@@ -185,31 +188,29 @@ class Collapser
         }
 
         // console.log(this.matrix.map(vec => vec.length == 1 ? vec[0] : "").join("\n"));
-        console.log(this.pos.matrix.map(vec => vec.join(", ")).join("\n"));
-        console.log(this);
+        // console.log(this.pos.matrix.map(vec => vec.join(", ")).join("\n"));
+        // console.log(this);
         
         return observation;
     }
 
     public backstep()
     {
-        if (this.stepNumber == 0) {return;}
+        if (this.stepNumber == 0) {return -1;}
         this.stepNumber--;
-        this.pos = new PokemonSuperposition(this.history[this.stepNumber]);
-        console.log(this.pos.matrix.map(vec => vec.join(", ")).join("\n"));
-        console.log(this);
+        this.pos = new TeamSuperposition(this.history[this.stepNumber]);
+        // console.log(this.pos.matrix.map(vec => vec.join(", ")).join("\n"));
+        // console.log(this);
+        return 0;
     }
 
     public set(index : number, value : string)
     {
-        this.pos.matrix[index] = [value];
+        console.log(index, value);
+        clearArray(this.pos.matrix[index]).push(value);
+        this.pos.collapse(index);
         this.stepNumber++;
-        this.history = [new PokemonSuperposition(this.pos)];
-    }
-
-    public fiveStep()
-    {
-        for (let i = 0; i < 5 && this.step() >= 0; i++);
+        this.history.push(new TeamSuperposition(this.pos));
     }
     
     // returns -2 on contradiciton

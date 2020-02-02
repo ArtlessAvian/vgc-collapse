@@ -21,7 +21,7 @@ function createMoveDropDowns()
                 '<tr>' +
                     '<td>' +
                         '<select id="dropdown-' + i + '-' + j + '" class="js-example-basic-single" name="pokemon-move">' +
-                            '<option>Move 1</option>' +
+                            '<option></option>' +
                         '</select>' +
                     '</td>' +
                 '</tr>';

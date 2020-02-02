@@ -7,46 +7,41 @@ Promise.all(Model.promises)
     $('document').ready(function() { 
         console.log("Dom Ready!")
         
-        $("#back-1").click(function()
-        {
-            main.backstep()
-        });
-        $("#forward-1").click(function() {main.step()});
-        $("#forward-5").click(function() {main.fiveStep()});
+        $("#back-5").click(function() {for (let i = 0; i < 3 && main.backstep() >= 0; i++); updateEverything();});
+        $("#back-1").click(function() {main.backstep(); updateEverything();});
+        $("#forward-1").click(function() {main.step(); updateEverything();});
+        $("#forward-5").click(function() {for (let i = 0; i < 3 && main.step() >= 0; i++); updateEverything();});
         // $("select/").select(function(event) {})
         $("select").on("select2:selecting", function(event) {
             // console.log(event, this);
-            let pokemon = event.params.args.data.text;
+            let text = event.params.args.data.text;
             let idLen = (this.id).length;
-            let cardNum : number;
-
-            if (idLen > 15)
-            {
-                cardNum = parseInt((this.id).charAt((this.id).length-3));
-            } else
-            {
-                cardNum = parseInt((this.id).charAt((this.id).length-1));
-            }
-
-            console.log(pokemon);
-            console.log(cardNum);
+            let cardNum = parseInt((this.id).charAt(idLen-3));
+            let offset = parseInt((this.id).charAt(idLen-1));
+            main.set(cardNum * PokemonSuperposition.pokemonSize + offset, text);
+            updateEverything();
         }); //main.update
     });
 
-    // console.log(main.pos.matrix)
-    
-    function updateCard(cardNum : number, matrix : string[][]) {
-        console.log(cardNum);
-        console.log(matrix);
-
-        // 0 is pokemon name
-        // 1 is ability
-        // [2-5] are moves (2, 3, 4, 5)
-        // matrix[]
-    }
-
-    Dropdown.createPokemonNameDropdown(main.pos.matrix[0]);
-    Dropdown.createPokemonMoveDropdown(main.pos.matrix[5]);
+    updateEverything();
 
     console.log("Main Ready!");
 })
+
+function updateCard(cardNum : number) {
+    Dropdown.createPokemonNameDropdown(main.pos.matrix[0 + cardNum * PokemonSuperposition.pokemonSize], cardNum);
+    Dropdown.createPokemonAbilityDropdown(main.pos.matrix[1 + cardNum * PokemonSuperposition.pokemonSize], cardNum);    
+    Dropdown.createPokemonMoveDropdown(main.pos.matrix[2 + cardNum * PokemonSuperposition.pokemonSize], cardNum, 2);    
+    Dropdown.createPokemonMoveDropdown(main.pos.matrix[3 + cardNum * PokemonSuperposition.pokemonSize], cardNum, 3);    
+    Dropdown.createPokemonMoveDropdown(main.pos.matrix[4 + cardNum * PokemonSuperposition.pokemonSize], cardNum, 4);    
+    Dropdown.createPokemonMoveDropdown(main.pos.matrix[5 + cardNum * PokemonSuperposition.pokemonSize], cardNum, 5);    
+    Dropdown.createPokemonItemDropdown(main.pos.matrix[6 + cardNum * PokemonSuperposition.pokemonSize], cardNum);    
+}
+
+function updateEverything()
+{
+    for (let i = 0; i <= 5; i++)
+    {
+        updateCard(i)
+    }
+}
