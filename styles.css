@@ -22,7 +22,7 @@ body {
         "left    pokemon right"
         "footer  footer  footer";
     
-    font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif; 
+    font-family: 'Montserrat', sans-serif;
 }
 
 header {
@@ -73,10 +73,14 @@ header {
     justify-content: flex-start;
 }
 
-select {
+select.js-example-basic-single {
+    width: 100%;
+}
+
+/* select {
     width: 100%;
     outline: none;
-}
+} */
 
 /* .name {
     margin: 5px;
