@@ -122,13 +122,16 @@ def get_pokemon_to_name_hashmaps(data: dict) -> list:
         dicts, etc.).
         
     Returns:
-        A dict mapping variable names (string) to the UTF-encoded Pokemon 
-        names (string).
+        A 2-tuple of dicts. The first dict maps variable names (string) to a
+        user-friendly name (string). The second dict maps the user-friendly
+        name (string) to a variable name (string).
     '''
     pokemon_to_name_map = {}
+    name_to_pokemon_map = {}
     for pokemon_name, second_dict in data.items():
         pokemon_to_name_map[pokemon_name] = second_dict["species"]
-    return pokemon_to_name_map
+        name_to_pokemon_map[second_dict["species"]] = pokemon_name
+    return (pokemon_to_name_map, name_to_pokemon_map)
                 
 if __name__ == '__main__':
     legal_pokemon_set = set()
@@ -164,9 +167,13 @@ if __name__ == '__main__':
         write_to_json('../data/abilities/data_abilities_to_pokemon.json', 
                       abilities_hashmaps[1])
     
+        name_hashmaps = get_pokemon_to_name_hashmaps(pokedex)
         # Get variable-to-name JSON.
-        write_to_json('../data/names/data_pokemon_to_name.json', 
-                      get_pokemon_to_name_hashmaps(pokedex))
+        write_to_json('../data/names/data_name_to_display.json', 
+                      name_hashmaps[0])
+        write_to_json('../data/names/data_display_to_name.json', 
+                      name_hashmaps[1])
+        
     
 
                       
