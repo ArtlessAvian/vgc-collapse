@@ -339,14 +339,14 @@ if __name__ == '__main__':
     # Get Pokemon-to-moves and Pokemon-to-items JSON.        
     with open('../data/gen8vgc2020-1760.json') as json_file:
         usage_stats = json.load(json_file)
-        moves_hashmaps = get_moves_hashmaps(usage_stats, moves_to_display_map, 0.01)
+        moves_hashmaps = get_moves_hashmaps(usage_stats, moves_to_display_map, 1)
         
         write_to_json('../data/moves/data_pokemon_to_moves.json', 
                       moves_hashmaps[0])     
         write_to_json('../data/moves/data_moves_to_pokemon.json', 
                       moves_hashmaps[1])
         
-        items_hashmaps = get_items_hashmap(usage_stats, items_to_display_map, 0.2)
+        items_hashmaps = get_items_hashmap(usage_stats, items_to_display_map, 20)
         write_to_json('../data/items/data_pokemon_to_items.json', 
                       items_hashmaps[0])     
         write_to_json('../data/items/data_items_to_pokemon.json', 
