@@ -47,7 +47,12 @@ def get_moves_hashmaps(data: dict) -> (dict, dict):
                             moves_to_pokemon_map[move].append(pokemon_name)
                         except KeyError:
                             moves_to_pokemon_map[move] = []
-                            moves_to_pokemon_map[move].append(pokemon_name)
+                            moves_to_pokemon_map[move].append(pokemon_name)                        
+                        try:
+                            pokemon_to_moves_map[pokemon_name].append(move)
+                        except KeyError:
+                            pokemon_to_moves_map[pokemon_name] = []
+                            pokemon_to_moves_map[pokemon_name].append(move)
                         break
     return (pokemon_to_moves_map, moves_to_pokemon_map)
 
