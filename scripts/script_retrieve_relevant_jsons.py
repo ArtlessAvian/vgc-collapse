@@ -29,7 +29,7 @@ def get_moves_hashmaps(data: dict) -> (dict, dict):
         data: Smogon's Learnset data. A dict mapping Pokemon (string) to a dict
         with a single key, "learnset" (string). The value of the associated 
         with "learnset" is another dict, which maps moves (string) to the 
-        method by which the aforementioned Pokemon attains the move.
+        method by which the aforementioned Pokemon attains the move (string).
         
     Returns:
         A 2-tuple of dicts. The first dict maps Pokemon (string) to the moves
@@ -100,7 +100,6 @@ def get_pokemon_to_name_hashmaps(data: dict) -> dict:
     return pokemon_to_name_map
                 
 if __name__ == '__main__':
-    
     with open('../data/data_learnsets.txt') as json_file:
         learnsets = json.load(json_file)
         moves_hashmaps = get_moves_hashmaps(learnsets)
