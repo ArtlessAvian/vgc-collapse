@@ -19,27 +19,40 @@ namespace Dropdown
             // dropdown.selectedIndex = -1;
         }
     }
+
+    export function createPokemonAbilityDropdown<T>(abilities : Array<T>, i : number,)
+    {
+            // Iterate through each possible pokemon move
+            let dropdown = document.getElementById("dropdown-" + i + "-1");
+            let txt = "<option value='' disabled selected hidden>-----</option>";
+            let a : T;
+            for (a of abilities)
+            {
+                txt += "<option>" + a + "</option>";
+            }
+            dropdown.innerHTML = txt;
+    }
     
-    export function createPokemonMoveDropdown<T>(moves : Array<T>)
+    export function createPokemonMoveDropdown<T>(moves : Array<T>, i : number, j : number)
     {
         console.log("Move");
 
         // Iterate through each pokemon card's id
-        for (let i=0; i < 6; i++)
+        // for (let i=0; i < 6; i++)
+        // {
+        // for (let j=2; j < 6; j++)
+        // {
+            // Iterate through each possible pokemon move
+        let dropdown = document.getElementById("dropdown-" + i + "-" + j);
+        let txt = "<option value='' disabled selected hidden>-----</option>";
+        let m : T;
+        for (m of moves)
         {
-            for (let j=2; j < 6; j++)
-            {
-                // Iterate through each possible pokemon move
-                let dropdown = document.getElementById("dropdown-" + i + "-" + j);
-                let txt = "<option value='' disabled selected hidden>-----</option>";
-                let m : T;
-                for (m of moves)
-                {
-                    txt += "<option>" + m + "</option>";
-                }
-                dropdown.innerHTML = txt;
-            }
+            txt += "<option>" + m + "</option>";
         }
+        dropdown.innerHTML = txt;
+        // }
+        // }
         
     }
 }
