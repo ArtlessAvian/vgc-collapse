@@ -96,6 +96,41 @@ def get_abilities_hashmaps(data: dict, names: dict, legal_pokemon: set) \
                     abilities_to_pokemon_map[ability].append(display_name)
     return (pokemon_to_abilities_map, abilities_to_pokemon_map)
 
+def get_types_hashmaps(data: dict, names: dict, legal_pokemon: set) \
+-> (dict, dict):
+    '''Hash Pokemon to abilities.
+    
+    The input file contains a lot of unneccessary information. This function
+    simply trims down the input.
+    
+    Arguments:
+        data: Smogon's Pokedex data. A dict mapping Pokemon (string) to a dict.
+            This dict maps trait types (string) to specific traits (ints, 
+            strings, dicts, etc.).
+        names: A dict mapping variable names (string) to user-friendly names
+            (string).
+        legal_pokemon: Set of Pokemon that exist in generation 8.
+        
+    Returns:
+        A 2-tuple of dicts. The first dict maps Pokemon (string) to the 
+        types they are (list of strings). The second dict maps types (string) 
+        to the Pokemon that are that type (list of strings).
+    '''
+    pokemon_to_types_map = {}
+    types_to_pokemon_map = {}
+    for pokemon_name, second_dict in data.items():
+        if pokemon_name in legal_pokemon:
+            display_name = names[pokemon_name]
+            types = second_dict["types"]
+            pokemon_to_types_map[display_name] = types    
+            for pkmn_type in types:
+                try:
+                    types_to_pokemon_map[pkmn_type].append(display_name)
+                except KeyError:
+                    types_to_pokemon_map[pkmn_type] = []
+                    types_to_pokemon_map[pkmn_type].append(display_name)
+    return (pokemon_to_types_map, types_to_pokemon_map)
+
 def get_legal_pokemon_set(data: dict) -> set:
     '''Hash variable names to human-friendly names.
     
@@ -176,12 +211,19 @@ if __name__ == '__main__':
                                                     name_to_display_map, \
                                                     legal_pokemon_set)
     
+        types_hashmaps = get_types_hashmaps(pokedex, \
+                                            name_to_display_map, \
+                                            legal_pokemon_set)
         # Get Pokemon-to-abilities JSON.
         write_to_json('../data/abilities/data_pokemon_to_abilities.json', 
                       abilities_hashmaps[0])     
         write_to_json('../data/abilities/data_abilities_to_pokemon.json', 
                       abilities_hashmaps[1])
         
+        write_to_json('../data/types/data_pokemon_to_types.json', 
+                      types_hashmaps[0])     
+        write_to_json('../data/types/data_types_to_pokemon.json', 
+                      types_hashmaps[1])
     
 
                       
