@@ -9,11 +9,9 @@ Promise.all(Model.promises)
 
         $("#forward-1").click(function() {main.step()});
         $("#forward-5").click(function() {main.fiveStep()});
-        $(".select2").on("select2:selecting", function(event) {
-            console.log(event);
-            // let name = event.currentTarget.innerText;
-            // console.log(name)
-            // alert(name);
+        // $("select/").select(function(event) {})
+        $("select").on("select2:selecting", function(event) {
+            console.log(event, this);
         }); //main.update
     });
 

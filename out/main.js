@@ -6,8 +6,8 @@ Promise.all(Model.promises)
         console.log("Dom Ready!");
         $("#forward-1").click(function () { main.step(); });
         $("#forward-5").click(function () { main.fiveStep(); });
-        $(".select2").on("select2:selecting", function (event) {
-            console.log(event);
+        $("select").on("select2:selecting", function (event) {
+            console.log(event, this);
         });
     });
     Dropdown.createPokemonNameDropdown(main.pos.matrix[0]);
