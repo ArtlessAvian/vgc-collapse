@@ -40,17 +40,23 @@ def get_moves_hashmaps(data: dict) -> (dict, dict):
     moves_to_pokemon_map = {}
     for pokemon_name, second_dict in data.items():
         for learnset, move_to_move_source_map in second_dict.items():
-            moves = getList(move_to_move_source_map.keys())
-            pokemon_to_moves_map[pokemon_name] = moves
-            for move in moves:
-                try:
-                    moves_to_pokemon_map[move].append(pokemon_name)
-                except KeyError:
-                    moves_to_pokemon_map[move] = []
-                    moves_to_pokemon_map[move].append(pokemon_name)
+            for move, move_sources in move_to_move_source_map.items():
+                for move_source in move_sources:
+                    if move_source[0] == '8':
+                        try:
+                            moves_to_pokemon_map[move].append(pokemon_name)
+                        except KeyError:
+                            moves_to_pokemon_map[move] = []
+                            moves_to_pokemon_map[move].append(pokemon_name)                        
+                        try:
+                            pokemon_to_moves_map[pokemon_name].append(move)
+                        except KeyError:
+                            pokemon_to_moves_map[pokemon_name] = []
+                            pokemon_to_moves_map[pokemon_name].append(move)
+                        break
     return (pokemon_to_moves_map, moves_to_pokemon_map)
 
-def get_abilities_hashmaps(data: dict) -> (dict, dict):
+def get_abilities_hashmaps(data: dict, legal_pokemon: set) -> (dict, dict):
     '''Hash Pokemon to abilities.
     
     The input file contains a lot of unneccessary information. This function
@@ -60,6 +66,7 @@ def get_abilities_hashmaps(data: dict) -> (dict, dict):
         data: Smogon's Pokedex data. A dict mapping Pokemon (string) to a dict.
         This dict maps trait types (string) to specific traits (ints, strings,
         dicts, etc.).
+        legal_pokemon: Set of Pokemon that exist in generation 8.
         
     Returns:
         A 2-tuple of dicts. The first dict maps Pokemon (string) to the 
@@ -69,17 +76,18 @@ def get_abilities_hashmaps(data: dict) -> (dict, dict):
     pokemon_to_abilities_map = {}
     abilities_to_pokemon_map = {}
     for pokemon_name, second_dict in data.items():
-        abilities_list = getList(second_dict["abilities"].values())
-        pokemon_to_abilities_map[pokemon_name] = abilities_list      
-        for ability in abilities_list:
-            try:
-                abilities_to_pokemon_map[ability].append(pokemon_name)
-            except KeyError:
-                abilities_to_pokemon_map[ability] = []
-                abilities_to_pokemon_map[ability].append(pokemon_name)
+        if pokemon_name in legal_pokemon:
+            abilities_list = getList(second_dict["abilities"].values())
+            pokemon_to_abilities_map[pokemon_name] = abilities_list      
+            for ability in abilities_list:
+                try:
+                    abilities_to_pokemon_map[ability].append(pokemon_name)
+                except KeyError:
+                    abilities_to_pokemon_map[ability] = []
+                    abilities_to_pokemon_map[ability].append(pokemon_name)
     return (pokemon_to_abilities_map, abilities_to_pokemon_map)
 
-def get_legal_pokemon_list(data: dict) -> dict:
+def get_legal_pokemon_set(data: dict) -> set:
     '''Hash variable names to human-friendly names.
     
     The input file contains a lot of unneccessary information. This function
@@ -90,17 +98,17 @@ def get_legal_pokemon_list(data: dict) -> dict:
         availability in different generations.
         
     Returns:
-        A list of Pokemon (string).
+        A set of Pokemon (string).
     '''
-    pokemon_list = []
+    pokemon_set = set()
     for pokemon_name, secondary_dict in data.items():
         try:
             if secondary_dict["tier"] != "Unreleased" \
                     and secondary_dict["tier"] != "Illegal":
-                pokemon_list.append(pokemon_name)
+                pokemon_set.add(pokemon_name)
         except KeyError:
             pass
-    return pokemon_list
+    return pokemon_set
 
 def get_pokemon_to_name_hashmaps(data: dict) -> list:
     '''Retrieve Pokemon in the gen 8 pokedex.
@@ -123,6 +131,18 @@ def get_pokemon_to_name_hashmaps(data: dict) -> list:
     return pokemon_to_name_map
                 
 if __name__ == '__main__':
+    legal_pokemon_set = set()
+    
+    with open('../data/data_formats.txt') as json_file:
+        formats = json.load(json_file)
+        legal_pokemon_set = get_legal_pokemon_set(formats)
+        dummy_var = {}
+        dummy_var["pokemon_list"] = list(legal_pokemon_set)
+        
+        # Get the Pokemon available in generation 8.
+        write_to_json('../data/names/data_legal_pokemon.json', 
+                      dummy_var)
+        
     with open('../data/data_learnsets.txt') as json_file:
         learnsets = json.load(json_file)
         moves_hashmaps = get_moves_hashmaps(learnsets)
@@ -135,7 +155,7 @@ if __name__ == '__main__':
  
     with open('../data/data_pokedex.txt', encoding='utf-8') as json_file:
         pokedex = json.load(json_file)
-        abilities_hashmaps = get_abilities_hashmaps(pokedex)
+        abilities_hashmaps = get_abilities_hashmaps(pokedex, legal_pokemon_set)
         
         
         # Get Pokemon-to-abilities JSON.
@@ -148,13 +168,5 @@ if __name__ == '__main__':
         write_to_json('../data/names/data_pokemon_to_name.json', 
                       get_pokemon_to_name_hashmaps(pokedex))
     
-    with open('../data/data_formats.txt') as json_file:
-        formats = json.load(json_file)
-        pokemon_list = get_legal_pokemon_list(formats)
-        dummy_var = {}
-        dummy_var["pokemon_list"] = pokemon_list
-        
-        # Get the Pokemon available in generation 8.
-        write_to_json('../data/names/data_legal_pokemon.json', 
-                      dummy_var)
+
                       

@@ -108,6 +108,8 @@ var instance;
 Promise.all(Model.promises).then(function () {
     instance = new Collapser();
     console.log("Ready!");
+}).then(function () {
+    Dropdown.createPokemonNameDropdown(instance.pos.matrix[0]);
 });
 function randomInt(start, end) {
     return Math.floor(Math.random() * (end - start + 1)) + start;
