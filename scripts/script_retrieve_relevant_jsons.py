@@ -1,15 +1,15 @@
 import json
 
-def getList(dictionary):
+def getList(dictionary: dict) -> [str]:
     '''Given a dictionary, gets list of keys.'''
     return [*dictionary]
 
-def write_to_json(file_name, dictionary):
+def write_to_json(file_name: str, dictionary: dict):
     '''Given a dictionary, creates a .json file.
     
     Arguments:
-        file_name (string): desired name of the file
-        dictionary (dict): dictionary that contains the information
+        file_name: desired name of the file
+        dictionary: dictionary that contains the information
         
     Returns:
         None
