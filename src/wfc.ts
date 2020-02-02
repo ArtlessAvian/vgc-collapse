@@ -128,6 +128,7 @@ class Collapser
         if (observation >= 0)
         {
             this.pos.collapse(observation);
+            this.stepNumber++;
             this.history.push(new PokemonSuperposition(this.pos));
         }
 
@@ -136,6 +137,12 @@ class Collapser
         console.log(this);
         
         return observation;
+    }
+
+    public backstep()
+    {
+        this.stepNumber--;
+        this.pos = this.history[this.stepNumber];
     }
 
     public fiveStep()

@@ -6,7 +6,8 @@ Promise.all(Model.promises)
 
     $('document').ready(function() { 
         console.log("Dom Ready!")
-
+        
+        $("#back-1").click(function() {main.backstep()});
         $("#forward-1").click(function() {main.step()});
         $("#forward-5").click(function() {main.fiveStep()});
         // $("select/").select(function(event) {})

@@ -86,11 +86,16 @@ var Collapser = (function () {
         var observation = this.observe();
         if (observation >= 0) {
             this.pos.collapse(observation);
+            this.stepNumber++;
             this.history.push(new PokemonSuperposition(this.pos));
         }
         console.log(this.pos.matrix.map(function (vec) { return vec.join(", "); }).join("\n"));
         console.log(this);
         return observation;
+    };
+    Collapser.prototype.backstep = function () {
+        this.stepNumber--;
+        this.pos = this.history[this.stepNumber];
     };
     Collapser.prototype.fiveStep = function () {
         for (var i = 0; i < 5 && this.step() >= 0; i++)
