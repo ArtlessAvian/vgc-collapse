@@ -68,10 +68,48 @@ header {
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
 
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-areas: 
+        "type  container container"
+        "type  container container"
+        "image container container"
+        "image container container";
+    
+    /* flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; */
+}
+
+.info-drop-container {
+    grid-area: container;
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.type {
+    grid-area: type;
+}
+
+.image {
+    grid-area: image;
+    display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+}
+
+img.image {
+    display: none;
+}
+
+img.image[src] {
+   display: block;
 }
 
 select.js-example-basic-single {
@@ -116,22 +154,10 @@ td span.select2-container--default .select2-selection--single .select2-selection
          box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
 }
 
-/* .name {
-    margin: 5px;
-    padding: 0;
-    font-size: 20px;
-} */
-
 .type {
     margin: 0;
     padding: 0;
     font-size: 16px;
-}
-
-img {
-    margin: 15px;
-    width: 90%;
-    height: 200px;
 }
 
 .move-table {
@@ -153,6 +179,7 @@ img {
     justify-self: center;
 }
 
+
 button {
     background-color: rgba(174, 255, 251, 0.6);
 
@@ -166,6 +193,10 @@ button {
     cursor: pointer;
 }
 
+button:hover {
+    background-color: rgba(152, 255, 250, 0.6);
+}
+
 button:active {
     background-color: rgba(105, 253, 246, 0.7);
     -webkit-box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
@@ -174,7 +205,7 @@ button:active {
 }
 
 /* 980px */
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 980px) {
     .pokemon-team-container {
         grid-template-columns: repeat(1, 1fr);
         grid-template-rows: repeat(6, 1fr);
