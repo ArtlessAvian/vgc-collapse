@@ -16,7 +16,7 @@ def write_to_json(file_name: str, info: dict):
     text_file.write(string)
     text_file.close()
     
-def get_moves_hashmaps(data: dict, move_display_names: dict) -> (dict, dict):
+def get_moves_hashmaps(data: dict, move_display_names: dict, threshold: float) -> (dict, dict):
     '''Hash Pokemon to moves.
     
     The input file contains a lot of unneccessary information. This function
@@ -26,6 +26,8 @@ def get_moves_hashmaps(data: dict, move_display_names: dict) -> (dict, dict):
         data: Smogon's usage statistics.
         move_display_names: A dict mapping move variable names (string) to 
             user-friendly display names (string).
+        threshold: Minimum amount of usage required for a move to be considered
+            worth-while.
         
     Returns:
         A 2-tuple of dicts. The first dict maps Pokemon (string) to the moves 
@@ -36,7 +38,7 @@ def get_moves_hashmaps(data: dict, move_display_names: dict) -> (dict, dict):
     moves_to_pokemon_map = {}
     for pokemon_name, second_dict in data["data"].items():
         for move, probability in second_dict["Moves"].items():
-            if probability > 0.2 and move != '':
+            if probability > threshold and move != '':
                 move_display_name = move_display_names[move]
                 try:
                     moves_to_pokemon_map[move_display_name].append(pokemon_name)
@@ -222,7 +224,8 @@ def get_items_to_name_hashmap(data: dict):
             strings, dicts, etc.).
         
     Returns:
-        A list of items (string).
+        A dict mapping item variable names (string) to user-friendly display 
+        names (string).
     '''
     items = {}
     for item, secondary_dict in data.items():
@@ -233,12 +236,29 @@ def get_items_to_name_hashmap(data: dict):
             items[item] = secondary_dict["name"]
     return items
 
-def get_items_hashmap(data: dict, item_display_names: dict):
+def get_items_hashmap(data: dict, item_display_names: dict, threshold: float):
+    '''Hash Pokemon to items.
+    
+    The input file contains a lot of unneccessary information. This function
+    simply trims down the input.
+    
+    Arguments:
+        data: Smogon's usage statistics.
+        item_display_names: A dict mapping item variable names (string) to 
+            user-friendly display names (string).
+        threshold: Minimum amount of usage required for an item to be 
+            considered worth-while.
+        
+    Returns:
+        A 2-tuple of dicts. The first dict maps Pokemon (string) to the items 
+        they commonly use (list of strings). The second dict maps items 
+        (string) to the Pokemon that commonly use them (list of strings).
+    '''
     pokemon_to_items_map = {}
     items_to_pokemon_map = {}
     for pokemon_name, second_dict in data["data"].items():
         for item, probability in second_dict["Items"].items():
-            if probability > 0.2 and item != "nothing":
+            if probability > threshold and item != "nothing":
                 item_display_name = item_display_names[item]
                 try:
                     items_to_pokemon_map[item_display_name].append(pokemon_name)
@@ -297,7 +317,6 @@ if __name__ == '__main__':
         moves = json.load(json_file)    
         moves_to_display_map = get_moves_to_name_hashmaps(moves)[0]
         
-    # Get items.
     with open('../data/data_items.txt', encoding='utf-8') as json_file:
         items_json = json.load(json_file)
         items_to_display_map = get_items_to_name_hashmap(items_json)
@@ -316,18 +335,18 @@ if __name__ == '__main__':
                   items_to_sprite_url_map)
     
 
-    
+
     # Get Pokemon-to-moves JSON.        
     with open('../data/gen8vgc2020-1760.json') as json_file:
         usage_stats = json.load(json_file)
-        moves_hashmaps = get_moves_hashmaps(usage_stats, moves_to_display_map)
+        moves_hashmaps = get_moves_hashmaps(usage_stats, moves_to_display_map, 0.01)
         
         write_to_json('../data/moves/data_pokemon_to_moves.json', 
                       moves_hashmaps[0])     
         write_to_json('../data/moves/data_moves_to_pokemon.json', 
                       moves_hashmaps[1])
         
-        items_hashmaps = get_items_hashmap(usage_stats, items_to_display_map)
+        items_hashmaps = get_items_hashmap(usage_stats, items_to_display_map, 0.2)
         write_to_json('../data/items/data_pokemon_to_items.json', 
                       items_hashmaps[0])     
         write_to_json('../data/items/data_items_to_pokemon.json', 
