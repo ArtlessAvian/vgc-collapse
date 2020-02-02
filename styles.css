@@ -74,33 +74,47 @@ header {
     justify-content: flex-start;
 }
 
-
 select.js-example-basic-single {
     width: 100% !important;
     border: none;
     outline: none !important;
 }
 
-
 span.select2-selection.select2-selection--single {
     border: none;
     outline: none !important;
 }
 
-.select2-container--default .select2-selection--single {
-    background-color: rgba(255, 89, 89, 0.5) !important;
-    outline: none !important;
-}
-
 span.select2-container--default .select2-selection--single .select2-selection__rendered {
+    background-color: rgba(255, 89, 89, 0.5);
+    outline: none !important;
+
     text-align: center;
     color: black;
+    padding: 0;
+    border-radius: 4px;
 }
 
-/* select {
-    width: 100%;
-    outline: none;
-} */
+span.select2-container--default .select2-selection--single .select2-selection__rendered:active {
+    background-color: rgba(255, 89, 89, 0.7);
+}
+
+.select2-selection__arrow {
+    display: none;
+}
+
+td span.select2-container--default .select2-selection--single .select2-selection__rendered {
+    background-color: rgb(255, 255, 255);
+    padding-left: 7px;
+    text-align: left;
+}
+
+td span.select2-container--default .select2-selection--single .select2-selection__rendered:active {
+    background-color: rgb(238, 238, 238);
+    -webkit-box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
+    -moz-box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
+         box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
+}
 
 /* .name {
     margin: 5px;
@@ -120,7 +134,7 @@ img {
     height: 200px;
 }
 
-.move-list {
+.move-table {
     background-color: rgb(255, 255, 255);
     float: right;
     width: 40%;
@@ -129,7 +143,7 @@ img {
     border-bottom-right-radius: 20px;
 }
 
-.move-list tr td {
+.move-table tr td {
     padding: 4px;
 }
 
@@ -140,7 +154,7 @@ img {
 }
 
 button {
-    background-color: rgba(189, 255, 252, 0.6);
+    background-color: rgba(174, 255, 251, 0.6);
 
     width: 50px;
     height: 50px;
