@@ -1,58 +1,60 @@
 namespace Dropdown
 {
-    export function createPokemonNameDropdown<T>(pokemon : Array<T>)
+    export function createPokemonNameDropdown<T>(pokemon : Array<T>, i : number)
     {
-        console.log("It worked!");
+        let dropdown = document.getElementById("dropdown-" + i + "-0");
+        let txt : string;
 
-        // Iterate through each pokemon card's dropdown id
-        for (let i=0; i < 6; i++)
+        if (pokemon.length === 1) {
+            txt = "<option value='" + pokemon[0] + "' disabled selected hidden>" + pokemon[0] + "</option>";
+        } else
         {
-            // Iterate through each possible pokemon name
-            let dropdown = document.getElementById("dropdown-" + i + "-0");
-            let txt = "<option value='' disabled selected hidden>-----</option>";
+            txt = "<option value='' disabled selected hidden>-----</option>";
             let p : T;
             for (p of pokemon)
             {
                 txt += "<option>" + p + "</option>";
             }
-            dropdown.innerHTML = txt;
-            // dropdown.selectedIndex = -1;
         }
+        dropdown.innerHTML = txt;
+
     }
 
     export function createPokemonAbilityDropdown<T>(abilities : Array<T>, i : number,)
     {
             // Iterate through each possible pokemon move
             let dropdown = document.getElementById("dropdown-" + i + "-1");
-            let txt = "<option value='' disabled selected hidden>-----</option>";
-            let a : T;
-            for (a of abilities)
+            let txt : string;
+
+            if (abilities.length === 1) {
+                txt = "<option value='" + abilities[0] + "' disabled selected hidden>" + abilities[0] + "</option>";
+            } else
             {
-                txt += "<option>" + a + "</option>";
+                txt = "<option value='' disabled selected hidden>-----</option>";
+                let a : T;
+                for (a of abilities)
+                {
+                    txt += "<option>" + a + "</option>";
+                }
             }
             dropdown.innerHTML = txt;
     }
     
     export function createPokemonMoveDropdown<T>(moves : Array<T>, i : number, j : number)
     {
-        console.log("Move");
-
-        // Iterate through each pokemon card's id
-        // for (let i=0; i < 6; i++)
-        // {
-        // for (let j=2; j < 6; j++)
-        // {
-            // Iterate through each possible pokemon move
         let dropdown = document.getElementById("dropdown-" + i + "-" + j);
-        let txt = "<option value='' disabled selected hidden>-----</option>";
-        let m : T;
-        for (m of moves)
+        let txt : string;
+        if (moves.length === 1) {
+            txt = "<option value='" + moves[0] + "' disabled selected hidden>" + moves[0] + "</option>";
+        } else
         {
-            txt += "<option>" + m + "</option>";
+            txt = "<option value='' disabled selected hidden>-----</option>";
+            let m : T;
+            for (m of moves)
+            {
+                txt += "<option>" + m + "</option>";
+            }    
         }
-        dropdown.innerHTML = txt;
-        // }
-        // }
-        
+        dropdown.innerHTML = txt;        
     }
 }
