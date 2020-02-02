@@ -220,6 +220,29 @@ def get_pokemon_to_sprite_url_hashmap(pkmn_display_names: dict, \
         pkmn_to_sprite_url_map[pkmn_display_name] = url_base + url_suffix
     return pkmn_to_sprite_url_map
 
+def get_items(data: dict):
+    '''Retrieve items.
+    
+    The input file contains a lot of unneccessary information. This function
+    simply trims down the input.
+    
+    Arguments:
+        data: Smogon's Items data. A dict mapping items (string) to a dict.
+            The dicts map trait types (string) to specific traits (ints, 
+            strings, dicts, etc.).
+        
+    Returns:
+        A list of items (string).
+    '''
+    items = []
+    for item, secondary_dict in data.items():
+        try:
+            if secondary_dict["isNonstandard"] != None:
+                pass
+        except:
+            items.append(secondary_dict["name"])
+    return items
+            
 if __name__ == '__main__':
     legal_pokemon_set = set()
     pkmn_name_to_display_map = None
@@ -249,12 +272,22 @@ if __name__ == '__main__':
         moves = json.load(json_file)    
         moves_to_display_map = get_moves_to_name_hashmaps(moves)[0]
         
-    #
+    # Get sprite urls.
     pkmn_to_sprite_url_map = \
             get_pokemon_to_sprite_url_hashmap(pkmn_name_to_display_map, \
                                               legal_pokemon_set)
     write_to_json('../data/sprite_url/data_names_to_sprite_url.json', 
                       pkmn_to_sprite_url_map)
+    
+    # Get items.
+    with open('../data/data_items.txt', encoding='utf-8') as json_file:
+        items_json = json.load(json_file)
+        items = get_items(items_json)
+        
+        dummy_var = {}
+        dummy_var["items"] = items
+        
+        write_to_json('../data/items/data_items.json', dummy_var)
     
     # Get Pokemon-to-moves JSON.        
     with open('../data/data_learnsets.txt') as json_file:
