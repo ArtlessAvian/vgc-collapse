@@ -10,17 +10,17 @@ function resetDropdownWidth()
 
 function createMoveDropDowns()
 {
-     for (let i=1; i <= 6; i++)
+     for (let i=0; i < 6; i++)
      {
         let moveTable = document.getElementById("move-table-" + i);
         let txt = "";
 
-        for (let j=1; j <= 4; j++)
+        for (let j=2; j < 6; j++)
         {
             txt += 
                 '<tr>' +
                     '<td>' +
-                        '<select id="dropdown-move-' + i + '-' + j + '" class="js-example-basic-single" name="pokemon-move">' +
+                        '<select id="dropdown-' + i + '-' + j + '" class="js-example-basic-single" name="pokemon-move">' +
                             '<option>Move 1</option>' +
                         '</select>' +
                     '</td>' +

@@ -5,10 +5,10 @@ namespace Dropdown
         console.log("It worked!");
 
         // Iterate through each pokemon card's dropdown id
-        for (let i=1; i <= 6; i++)
+        for (let i=0; i < 6; i++)
         {
             // Iterate through each possible pokemon name
-            let dropdown = document.getElementById("dropdown-name-" + i);
+            let dropdown = document.getElementById("dropdown-" + i + "-0");
             let txt = "<option value='' disabled selected hidden>-----</option>";
             let p : T;
             for (p of pokemon)
@@ -25,12 +25,12 @@ namespace Dropdown
         console.log("Move");
 
         // Iterate through each pokemon card's id
-        for (let i=1; i <= 6; i++)
+        for (let i=0; i < 6; i++)
         {
-            for (let j=1; j <= 4; j++)
+            for (let j=2; j < 6; j++)
             {
                 // Iterate through each possible pokemon move
-                let dropdown = document.getElementById("dropdown-move-" + i + "-" + j);
+                let dropdown = document.getElementById("dropdown-" + i + "-" + j);
                 let txt = "<option value='' disabled selected hidden>-----</option>";
                 let m : T;
                 for (m of moves)
