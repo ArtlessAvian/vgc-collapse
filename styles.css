@@ -23,10 +23,12 @@ body {
 
 }
 
-.header {
+header {
     grid-area: header;
     text-align: center;
     margin: auto 0;
+    font-size: 30px;
+    font-weight: 700;
 }
 
 .pokemon-team-container {
@@ -66,11 +68,16 @@ body {
     justify-content: flex-start;
 }
 
-.name {
+select {
+    width: 100%;
+    outline: none;
+    background: red;
+}
+/* .name {
     margin: 5px;
     padding: 0;
     font-size: 20px;
-}
+} */
 
 .type {
     margin: 0;
