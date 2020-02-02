@@ -44,8 +44,8 @@ header {
     padding: 15px;
 
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
     grid-column-gap: 10px;
     grid-row-gap: 15px;
 
@@ -61,11 +61,12 @@ header {
 
 .info-data {
     background-color: rgba(255, 0, 0, 0.5);
-    /* color: white; */
-    width: 100%;
-    height: 70%;
+    float: left;
+    width: calc(60% - 30px);
+    height: calc(100% - 30px);
+    padding: 15px;
     border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
 
     display: flex;
     flex-direction: column;
@@ -73,8 +74,27 @@ header {
     justify-content: flex-start;
 }
 
+
 select.js-example-basic-single {
-    width: 100%;
+    width: 100% !important;
+    border: none;
+    outline: none !important;
+}
+
+
+span.select2-selection.select2-selection--single {
+    border: none;
+    outline: none !important;
+}
+
+.select2-container--default .select2-selection--single {
+    background-color: rgba(255, 89, 89, 0.5) !important;
+    outline: none !important;
+}
+
+span.select2-container--default .select2-selection--single .select2-selection__rendered {
+    text-align: center;
+    color: black;
 }
 
 /* select {
@@ -103,9 +123,9 @@ img {
 .move-list {
     background-color: rgb(255, 255, 255);
     float: right;
-    width: 100%;
-    height: 30%;
-    border-bottom-left-radius: 20px;
+    width: 40%;
+    height: 100%;
+    border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
 }
 
@@ -137,4 +157,13 @@ button:active {
     -webkit-box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
        -moz-box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
             box-shadow: inset 0px 0px 4px rgba(193, 193, 193, 0.5);
+}
+
+/* 980px */
+@media only screen and (max-width: 800px) {
+    .pokemon-team-container {
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: repeat(6, 1fr);
+        grid-column-gap: 0;
+    }
 }
