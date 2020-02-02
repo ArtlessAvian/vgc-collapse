@@ -230,8 +230,8 @@ class Collapser
     
         // let vector = randomElement(this.pos.state.filter(thingy => thingy.length > 1));
         let choices = this.pos.matrix.filter(vec => vec.length > 1)
-        let smallest = Math.min.apply(Math, choices.map(choice => choice.length));
-        let vector = randomElement(choices.filter(vec => vec.length == smallest))
+        // let smallest = Math.min.apply(Math, choices.map(choice => choice.length));
+        let vector = randomElement(choices); //.filter(vec => vec.length == smallest))
 
         let index = this.pos.matrix.indexOf(vector);
         let element = randomElement(vector);

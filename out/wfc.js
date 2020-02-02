@@ -146,8 +146,7 @@ var Collapser = (function () {
             return -1;
         }
         var choices = this.pos.matrix.filter(function (vec) { return vec.length > 1; });
-        var smallest = Math.min.apply(Math, choices.map(function (choice) { return choice.length; }));
-        var vector = randomElement(choices.filter(function (vec) { return vec.length == smallest; }));
+        var vector = randomElement(choices);
         var index = this.pos.matrix.indexOf(vector);
         var element = randomElement(vector);
         clearArray(this.pos.matrix[index]).push(element);
