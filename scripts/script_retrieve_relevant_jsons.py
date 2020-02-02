@@ -47,6 +47,12 @@ def get_abilities_hashmaps(data):
                 abilities_to_pokemon_map[ability] = []
             abilities_to_pokemon_map[ability].append(pokemon_name)
     return (pokemon_to_abilities_map, abilities_to_pokemon_map)
+
+def get_pokemon_to_name_hashmaps(data):
+    pokemon_to_name_map = {}
+    for pokemon_name, second_dict in data.items():
+        pokemon_to_name_map[pokemon_name] = second_dict["species"]
+    return pokemon_to_name_map
                 
 if __name__ == '__main__':
     
@@ -65,4 +71,6 @@ if __name__ == '__main__':
         
     write_to_json('../data/abilities/data_pokemon_to_abilities.json', abilities_hashmaps[0])     
     write_to_json('../data/abilities/data_abilities_to_pokemon.json', abilities_hashmaps[1])
+    
+    write_to_json('../data/names/data_pokemon_to_name.json', get_pokemon_to_name_hashmaps(pokedex))
     
