@@ -1,3 +1,31 @@
+var TeamSuperposition = (function () {
+    function TeamSuperposition(copy) {
+        this.matrix = [];
+        this.members = [];
+        if (copy == undefined) {
+            for (var i = 0; i < 6; i++) {
+                this.members.push(new PokemonSuperposition());
+            }
+        }
+        else {
+            for (var i = 0; i < 6; i++) {
+                this.members.push(new PokemonSuperposition(copy.members[i]));
+            }
+        }
+        this.buildMatrix();
+    }
+    TeamSuperposition.prototype.buildMatrix = function () {
+        this.matrix = [];
+        for (var i = 0; i < 6; i++) {
+            this.matrix = this.matrix.concat(this.members[i].matrix);
+            console.log(this.matrix);
+        }
+    };
+    TeamSuperposition.prototype.collapse = function (observation) {
+        this.members[Math.floor(observation / 6)].collapse(observation % 6);
+    };
+    return TeamSuperposition;
+}());
 var PokemonSuperposition = (function () {
     function PokemonSuperposition(copy) {
         this.matrix = [];
@@ -13,9 +41,9 @@ var PokemonSuperposition = (function () {
             this.matrix.push(copy.matrix[0].slice());
             this.matrix.push(copy.matrix[1].slice());
             this.matrix.push(copy.matrix[2].slice());
-            this.matrix.push(copy.matrix[2].slice());
-            this.matrix.push(copy.matrix[2].slice());
-            this.matrix.push(copy.matrix[2].slice());
+            this.matrix.push(copy.matrix[3].slice());
+            this.matrix.push(copy.matrix[4].slice());
+            this.matrix.push(copy.matrix[5].slice());
         }
     }
     PokemonSuperposition.prototype.collapse = function (observation, recursion_depth) {
@@ -30,7 +58,7 @@ var PokemonSuperposition = (function () {
             });
             var intersection = intersect(this.matrix[1], possible_abilities_1);
             if (!arrayEqual(this.matrix[1], intersection)) {
-                this.matrix[1] = intersection;
+                fillArray(this.matrix[1], intersection);
                 this.collapse(1, recursion_depth + 1);
             }
             var possible_moves_1 = [];
@@ -40,7 +68,7 @@ var PokemonSuperposition = (function () {
             for (var i = 2; i <= 5; i++) {
                 var intersection_1 = intersect(this.matrix[i], possible_moves_1);
                 if (!arrayEqual(this.matrix[i], intersection_1)) {
-                    this.matrix[i] = intersection_1;
+                    fillArray(this.matrix[i], intersection_1);
                     this.collapse(i, recursion_depth + 1);
                 }
             }
@@ -52,7 +80,7 @@ var PokemonSuperposition = (function () {
             });
             var intersection = intersect(this.matrix[0], possible_pokemon_1);
             if (!arrayEqual(this.matrix[0], intersection)) {
-                this.matrix[0] = intersection;
+                fillArray(this.matrix[0], intersection);
                 this.collapse(0, recursion_depth + 1);
             }
         }
@@ -63,7 +91,7 @@ var PokemonSuperposition = (function () {
             });
             var intersection = intersect(this.matrix[0], possible_pokemon_2);
             if (!arrayEqual(this.matrix[0], intersection)) {
-                this.matrix[0] = intersection;
+                fillArray(this.matrix[0], intersection);
                 this.collapse(0, recursion_depth + 1);
             }
             for (var i = 2; i <= 5; i++) {
@@ -79,18 +107,37 @@ var PokemonSuperposition = (function () {
 var Collapser = (function () {
     function Collapser() {
         this.stepNumber = 0;
-        this.pos = new PokemonSuperposition();
-        this.history = [new PokemonSuperposition(this.pos)];
+        this.pos = new TeamSuperposition();
+        this.history = [new TeamSuperposition(this.pos)];
     }
     Collapser.prototype.step = function () {
         var observation = this.observe();
         if (observation >= 0) {
             this.pos.collapse(observation);
+            this.stepNumber++;
+            this.history = this.history.slice(0, this.stepNumber);
             this.history.push(new PokemonSuperposition(this.pos));
+        }
+        else {
+            console.log("Done or contradiction");
         }
         console.log(this.pos.matrix.map(function (vec) { return vec.join(", "); }).join("\n"));
         console.log(this);
         return observation;
+    };
+    Collapser.prototype.backstep = function () {
+        if (this.stepNumber == 0) {
+            return;
+        }
+        this.stepNumber--;
+        this.pos = new PokemonSuperposition(this.history[this.stepNumber]);
+        console.log(this.pos.matrix.map(function (vec) { return vec.join(", "); }).join("\n"));
+        console.log(this);
+    };
+    Collapser.prototype.set = function (index, value) {
+        this.pos.matrix[index] = [value];
+        this.stepNumber++;
+        this.history = [new PokemonSuperposition(this.pos)];
     };
     Collapser.prototype.fiveStep = function () {
         for (var i = 0; i < 5 && this.step() >= 0; i++)
@@ -108,7 +155,7 @@ var Collapser = (function () {
         var vector = randomElement(choices.filter(function (vec) { return vec.length == smallest; }));
         var index = this.pos.matrix.indexOf(vector);
         var element = randomElement(vector);
-        this.pos.matrix[index] = [element];
+        clearArray(this.pos.matrix[index]).push(element);
         return index;
     };
     return Collapser;
@@ -145,4 +192,18 @@ function intersect(a, b) {
         }
     }
     return out;
+}
+function clearArray(a) {
+    for (var i = a.length; i > 0; i--) {
+        a.pop();
+    }
+    return a;
+}
+function fillArray(a, b) {
+    clearArray(a);
+    for (var _i = 0, b_1 = b; _i < b_1.length; _i++) {
+        var c = b_1[_i];
+        a.push(c);
+    }
+    return a;
 }
