@@ -6,12 +6,13 @@ html, body {
 }
 
 body {
-    background:
+    /* background:
         linear-gradient(
             to bottom right,
             #39ebd1 10%,
             #02a1fd
-        );
+        ); */
+    background-color: white;
 
     display: grid;
     grid-template-columns: 1fr 13fr 1fr;
@@ -20,19 +21,22 @@ body {
         "header  header  header"
         "left    pokemon right"
         "footer  footer  footer";
-
+    
+    font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif; 
 }
 
 header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
     grid-area: header;
-    text-align: center;
-    margin: auto 0;
-    font-size: 30px;
-    font-weight: 700;
+    font-size: 35px;
+    font-weight: 900;
 }
 
 .pokemon-team-container {
-    background-color: rgba(0, 255, 234, 0.6);
+    /* background-color: rgb(255, 0, 0); */
 
     grid-area: pokemon;
     height: calc(100% - 30px);
@@ -46,17 +50,18 @@ header {
     grid-row-gap: 15px;
 
     border-radius: 20px;
-    box-shadow: 2px 2px 15px rgba(80, 80, 80, 0.5);
+    /* box-shadow: 2px 2px 15px rgba(80, 80, 80, 0.5); */
 }
 
 .pokemon-card {
-    background-color: rgba(68, 255, 239, 0.651);
+    /* background-color: rgba(68, 255, 239, 0.651); */
     border-radius: 20px;
     box-shadow: 2px 2px 6px rgba(90, 90, 90, 0.4);
 }
 
 .info-data {
-    background-color: #00aeb5;
+    background-color: rgba(255, 0, 0, 0.5);
+    /* color: white; */
     width: 100%;
     height: 70%;
     border-top-left-radius: 20px;
@@ -71,8 +76,8 @@ header {
 select {
     width: 100%;
     outline: none;
-    background: red;
 }
+
 /* .name {
     margin: 5px;
     padding: 0;
